@@ -123,7 +123,7 @@ export default {
                 }
               ]
             ],
-            resize_keyboard: true,
+            resize_keyboard: false,
             is_persistent: true
           }
         });
