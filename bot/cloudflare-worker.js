@@ -15,6 +15,7 @@
  */
 
 const APP_URL = 'https://bexaf3163.github.io/Gym-Training-/';
+const BANNER_URL = 'https://bexaf3163.github.io/Gym-Training-/bot/banner.jpg';
 const BUTTON_TEXT = '🏋️ Открыть GymNote';
 
 async function deriveWebhookSecret(token) {
@@ -106,27 +107,54 @@ export default {
         const firstName = escapeHtml(msg.from?.first_name || '');
         const greeting = firstName ? `Привет, <b>${firstName}</b>! 👋` : 'Привет! 👋';
 
-        await tgApi(env.BOT_TOKEN, 'sendMessage', {
-          chat_id: chatId,
-          parse_mode: 'HTML',
-          text:
-            `${greeting}\n\n` +
-            `<b>GymNote</b> — трекер тренировок, прогрессии весов и тренажёров.\n` +
-            `Все данные сохраняются автоматически в твоём облаке Telegram ☁️\n\n` +
-            `Жми большую кнопку внизу 👇`,
-          reply_markup: {
-            keyboard: [
-              [
-                {
-                  text: BUTTON_TEXT,
-                  web_app: { url: APP_URL }
-                }
-              ]
-            ],
-            resize_keyboard: false,
-            is_persistent: true
+        // Убираем старую нижнюю клавиатуру, если она осталась от прошлой версии
+        try {
+          const tmp = await tgApi(env.BOT_TOKEN, 'sendMessage', {
+            chat_id: chatId,
+            text: '⚡',
+            disable_notification: true,
+            reply_markup: { remove_keyboard: true }
+          });
+          if (tmp?.ok && tmp.result?.message_id) {
+            await tgApi(env.BOT_TOKEN, 'deleteMessage', {
+              chat_id: chatId,
+              message_id: tmp.result.message_id
+            });
           }
+        } catch {}
+
+        const caption =
+          `${greeting}\n\n` +
+          `Твои тренировки, прогрессия весов и 97 тренажёров с анимациями.\n` +
+          `Все данные сохраняются автоматически в твоём облаке Telegram ☁️`;
+
+        const inlineMarkup = {
+          inline_keyboard: [
+            [
+              {
+                text: BUTTON_TEXT,
+                web_app: { url: APP_URL }
+              }
+            ]
+          ]
+        };
+
+        const photoRes = await tgApi(env.BOT_TOKEN, 'sendPhoto', {
+          chat_id: chatId,
+          photo: BANNER_URL,
+          caption,
+          parse_mode: 'HTML',
+          reply_markup: inlineMarkup
         });
+
+        if (!photoRes?.ok) {
+          await tgApi(env.BOT_TOKEN, 'sendMessage', {
+            chat_id: chatId,
+            text: `<b>GymNote</b>\n\n${caption}`,
+            parse_mode: 'HTML',
+            reply_markup: inlineMarkup
+          });
+        }
       }
 
       return new Response('OK', { status: 200 });
