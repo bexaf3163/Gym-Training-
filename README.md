@@ -17,3 +17,11 @@
 3. Отправьте `/mybots` → выберите бота → **Bot Settings → Menu Button → Configure menu button**.
 4. Вставьте URL приложения: `https://bexaf3163.github.io/Gym-Training-/` и название кнопки (например, `Тренировка`).
 5. Откройте бота у себя и перешлите ссылку на бота Лере — у каждого автоматически будет своё личное облако Telegram!
+
+## Большая кнопка на всю ширину чата (опционально, бесплатно)
+Готовый скрипт лежит в `bot/cloudflare-worker.js`:
+1. Откройте [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages → Create Worker → Deploy → Edit code**.
+2. Вставьте код из `bot/cloudflare-worker.js` и нажмите **Deploy**.
+3. В настройках воркера (**Settings → Variables and Secrets → Add → Secret**) добавьте переменную `BOT_TOKEN` с токеном из `@BotFather`.
+4. Откройте в браузере `https://<ваш-воркер>.workers.dev/setup` — webhook и кнопка настроятся автоматически.
+5. Отправьте `/start` в бот — появится приветствие и большая постоянная кнопка **«🏋️ Открыть GymNote»** на всю ширину экрана.
