@@ -2229,6 +2229,49 @@ button:active {
   to { transform: translateY(13px); }
 }
 
+.anim-cross-low-l { animation: animCrossLowL 2.1s ease-in-out infinite alternate; }
+.anim-cross-low-r { animation: animCrossLowR 2.1s ease-in-out infinite alternate; }
+.anim-incline-press { animation: animInclinePress 2.1s ease-in-out infinite alternate; }
+.anim-tbar-pull { animation: animTbarPull 2.0s ease-in-out infinite alternate; }
+.anim-pendulum { animation: animPendulum 2.2s ease-in-out infinite alternate; }
+.anim-deadlift-pull { animation: animDeadliftPull 2.2s ease-in-out infinite alternate; }
+.anim-cable-lat { animation: animCableLat 2.0s ease-in-out infinite alternate; }
+
+@keyframes animCrossLowL {
+  from { transform: rotate(22deg); }
+  to { transform: rotate(-28deg); }
+}
+
+@keyframes animCrossLowR {
+  from { transform: rotate(-22deg); }
+  to { transform: rotate(28deg); }
+}
+
+@keyframes animInclinePress {
+  from { transform: translate(0px, 0px); }
+  to { transform: translate(9px, -11px); }
+}
+
+@keyframes animTbarPull {
+  from { transform: rotate(10deg); }
+  to { transform: rotate(-22deg); }
+}
+
+@keyframes animPendulum {
+  from { transform: rotate(-22deg); }
+  to { transform: rotate(12deg); }
+}
+
+@keyframes animDeadliftPull {
+  from { transform: translateY(11px); }
+  to { transform: translateY(-3px); }
+}
+
+@keyframes animCableLat {
+  from { transform: rotate(18deg); }
+  to { transform: rotate(-44deg); }
+}
+
 
 
 

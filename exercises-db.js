@@ -26,7 +26,7 @@
       equipment: 'Тренажёр',
       muscle: 'Грудь',
       day: 'День 1',
-      visual: 'chest_press_machine',
+      visual: 'hammer_chest_press',
       markW: 60, leraW: 20, step: 2.5,
       aliases: ['hammer', 'hammer strength', 'hammer press', 'hs chest', 'хаммер', 'хамер', 'рычажный жим', 'жим в хамере', 'жим хаммер', 'изолатеральный жим']
     },
@@ -37,7 +37,7 @@
       equipment: 'Тренажёр',
       muscle: 'Грудь',
       day: 'День 2',
-      visual: 'chest_press_machine',
+      visual: 'hammer_incline_press',
       markW: 50, leraW: 15, step: 2.5,
       aliases: ['incline hammer', 'upper chest hammer', 'наклонный хаммер', 'верх груди хаммер', 'рычажный вверх']
     },
@@ -70,7 +70,7 @@
       equipment: 'Блок',
       muscle: 'Грудь',
       day: 'День 2',
-      visual: 'cable_crossover',
+      visual: 'cable_crossover_low',
       markW: 15, leraW: 7.5, step: 2.5,
       aliases: ['low cable fly', 'low to high', 'нижний кроссовер', 'кроссовер снизу', 'верх груди блок']
     },
@@ -92,7 +92,7 @@
       equipment: 'Штанга',
       muscle: 'Грудь',
       day: 'День 2',
-      visual: 'bench_press',
+      visual: 'incline_barbell_bench',
       markW: 60, leraW: 20, step: 2.5,
       aliases: ['incline bench', 'ibp', 'incline bb', 'наклонный жим штанги', 'верх груди штанга', 'жим 30']
     },
@@ -103,7 +103,7 @@
       equipment: 'Тренажёр',
       muscle: 'Грудь',
       day: 'День 1',
-      visual: 'bench_press',
+      visual: 'smith_bench_press',
       markW: 60, leraW: 25, step: 2.5,
       aliases: ['smith bench', 'smith incline', 'смит грудь', 'жим в смите', 'наклонный смит']
     },
@@ -114,7 +114,7 @@
       equipment: 'Гантели',
       muscle: 'Грудь',
       day: 'День 1',
-      visual: 'bench_press',
+      visual: 'db_bench_press',
       markW: 26, leraW: 10, step: 2,
       aliases: ['db bench', 'dumbbell bench', 'db press', 'жим гантелей', 'жг', 'гантели грудь']
     },
@@ -125,7 +125,7 @@
       equipment: 'Гантели',
       muscle: 'Грудь',
       day: 'День 2',
-      visual: 'bench_press',
+      visual: 'incline_db_press',
       markW: 24, leraW: 10, step: 2,
       aliases: ['incline db', 'incline dumbbell', 'idbp', 'наклонный жим гантелей', 'жим на наклонной', 'гантели 30']
     },
@@ -159,7 +159,7 @@
       equipment: 'Тренажёр',
       muscle: 'Грудь',
       day: 'День 2',
-      visual: 'dips_bars',
+      visual: 'gravitron_dips',
       markW: 20, leraW: 35, step: 2.5,
       aliases: ['gravitron dips', 'assisted dip', 'гравитрон брусья', 'брусья с противовесом', 'противовес брусья']
     },
@@ -183,7 +183,7 @@
       muscle: 'Грудь',
       kind: 'bodyweight',
       day: 'День 1',
-      visual: 'pushup_floor',
+      visual: 'knee_pushups',
       markW: 0, leraW: 0, step: 2.5,
       aliases: ['knee push ups', 'отжимания с колен', 'легкие отжимания']
     },
@@ -207,7 +207,7 @@
       equipment: 'Блок',
       muscle: 'Спина',
       day: 'День 2',
-      visual: 'lat_pulldown',
+      visual: 'lat_pulldown_close',
       markW: 55, leraW: 27.5, step: 2.5,
       aliases: ['close grip pulldown', 'v-bar pulldown', 'neutral pulldown', 'узкий хват блок', 'параллельный хват', 'твб узкий']
     },
@@ -240,7 +240,7 @@
       equipment: 'Тренажёр',
       muscle: 'Спина',
       day: 'День 3',
-      visual: 'lat_pulldown',
+      visual: 'hammer_high_row',
       markW: 60, leraW: 25, step: 2.5,
       aliases: ['high row', 'dy row', 'hammer pulldown', 'верхний хаммер', 'тяга сверху хаммер', 'рычажная сверху']
     },
@@ -251,7 +251,7 @@
       equipment: 'Тренажёр',
       muscle: 'Спина',
       day: 'День 2',
-      visual: 'row_machine',
+      visual: 't_bar_row',
       markW: 45, leraW: 20, step: 2.5,
       aliases: ['t-bar', 'tbar', 't bar row', 'т-гриф', 'тяга с упором в грудь', 'тбар']
     },
@@ -318,7 +318,7 @@
       equipment: 'Штанга',
       muscle: 'Спина',
       day: 'День 3',
-      visual: 'deadlift_rdl',
+      visual: 'deadlift_conv',
       markW: 100, leraW: 45, step: 5,
       aliases: ['deadlift', 'dl', 'становая', 'ст', 'тяга штанги с пола', 'классика']
     },
@@ -399,7 +399,7 @@
       equipment: 'Тренажёр',
       muscle: 'Ноги',
       day: 'День 2',
-      visual: 'hack_squat',
+      visual: 'pendulum_squat',
       markW: 50, leraW: 20, step: 5,
       aliases: ['pendulum', 'pendulum squat', 'маятник', 'маятниковый присед', 'пендулум']
     },
@@ -512,7 +512,7 @@
       equipment: 'Гантели',
       muscle: 'Ноги',
       day: 'День 2',
-      visual: 'deadlift_rdl',
+      visual: 'rdl_db',
       markW: 24, leraW: 14, step: 2,
       aliases: ['db rdl', 'dumbbell rdl', 'румынка с гантелями', 'румынская гантели', 'рдл гантели']
     },
@@ -592,7 +592,7 @@
       equipment: 'Тренажёр',
       muscle: 'Ягодицы',
       day: 'День 1',
-      visual: 'hip_thrust',
+      visual: 'hip_thrust_machine',
       markW: 90, leraW: 60, step: 5,
       aliases: ['hip thrust', 'booty builder', 'glute drive', 'хип траст', 'хиптраст', 'ягодичный мост', 'бути билдер', 'ягодицы тренажер']
     },
@@ -648,7 +648,7 @@
       equipment: 'Блок',
       muscle: 'Ягодицы',
       day: 'День 3',
-      visual: 'glute_kickback',
+      visual: 'cable_kickback',
       markW: 15, leraW: 10, step: 2.5,
       aliases: ['cable kickback', 'ankle strap', 'махи ногой в кроссовере', 'отведение с манжетой', 'манжета блок']
     },
@@ -659,7 +659,7 @@
       equipment: 'Гантели',
       muscle: 'Ягодицы',
       day: 'День 2',
-      visual: 'goblet_squat',
+      visual: 'sumo_squat',
       markW: 32, leraW: 20, step: 2,
       aliases: ['sumo', 'sumo squat', 'plie', 'сумо', 'плие', 'широкий присед']
     },
@@ -694,7 +694,7 @@
       equipment: 'Тренажёр',
       muscle: 'Плечи',
       day: 'День 3',
-      visual: 'lateral_raise',
+      visual: 'lateral_raise_machine',
       markW: 30, leraW: 15, step: 2.5,
       aliases: ['lateral raise machine', 'side delt machine', 'махи тренажер', 'средняя дельта тренажер', 'отведения в стороны']
     },
@@ -727,7 +727,7 @@
       equipment: 'Гантели',
       muscle: 'Плечи',
       day: 'День 3',
-      visual: 'ohp_free',
+      visual: 'db_shoulder_press',
       markW: 18, leraW: 8, step: 2,
       aliases: ['db ohp', 'db shoulder press', 'arnold press', 'жим гантелей вверх', 'жим сидя плечи', 'жим арнольда']
     },
@@ -760,7 +760,7 @@
       equipment: 'Блок',
       muscle: 'Плечи',
       day: 'День 3',
-      visual: 'lateral_raise',
+      visual: 'cable_lateral_raise',
       markW: 7.5, leraW: 5, step: 1.25,
       aliases: ['cable lateral', 'махи рукой в кроссовере', 'махи в блоке', 'средняя дельта блок']
     },
@@ -795,7 +795,7 @@
       equipment: 'Гантели',
       muscle: 'Руки',
       day: 'День 2',
-      visual: 'standing_curl',
+      visual: 'hammer_curls',
       markW: 14, leraW: 6, step: 1,
       aliases: ['hammer curl', 'hammer curls', 'молотки', 'молотковые сгибания', 'брахиалис']
     },
@@ -806,7 +806,7 @@
       equipment: 'Штанга',
       muscle: 'Руки',
       day: 'День 2',
-      visual: 'standing_curl',
+      visual: 'ez_bar_curl',
       markW: 30, leraW: 12.5, step: 2.5,
       aliases: ['ez curl', 'barbell curl', 'preacher curl', 'scott curl', 'кривой гриф', 'скамья скотта', 'скотт', 'бицепс штанга']
     },
@@ -817,7 +817,7 @@
       equipment: 'Блок',
       muscle: 'Руки',
       day: 'День 2',
-      visual: 'standing_curl',
+      visual: 'cable_bicep_curl',
       markW: 25, leraW: 12.5, step: 2.5,
       aliases: ['cable curl', 'бицепс в кроссовере', 'бицепс блок']
     },
@@ -850,7 +850,7 @@
       equipment: 'Тренажёр',
       muscle: 'Руки',
       day: 'День 3',
-      visual: 'dips_bars',
+      visual: 'tricep_dip_machine',
       markW: 50, leraW: 25, step: 2.5,
       aliases: ['tricep dip machine', 'tricep press', 'трицепс тренажер', 'брусья сидя тренажер']
     },
@@ -997,7 +997,7 @@
       muscle: 'Кор',
       kind: 'core',
       day: 'День 3',
-      visual: 'torso_rotation',
+      visual: 'russian_twist',
       markW: 0, leraW: 0, step: 2.5,
       aliases: ['russian twist', 'русские скручивания', 'твист пресс', 'косые на полу']
     },
@@ -2439,6 +2439,447 @@
         <path d="M50 26l-8 14M52 28l22-2" class="m-body-stroke"/>
         <g class="anim-pedal-crank" style="transform-origin:56px 56px">
           <path d="M43 40l14 14-4 12" class="m-limb-accent"/>
+        </g>
+      </svg>`,
+
+    // 70. Hammer Strength Flat Chest Press (Plate-Loaded Lever, no stack)
+    hammer_chest_press: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M24 78L40 18h20v60M36 54h34M64 54v24" class="m-frame"/>
+        <rect x="40" y="24" width="6" height="27" rx="3" class="m-pad"/>
+        <rect x="44" y="51" width="22" height="6" rx="3" class="m-pad"/>
+        <circle cx="54" cy="23" r="5" class="m-body"/>
+        <path d="M52 29v21h14l7 12v14" class="m-body-stroke"/>
+        <path d="M72 76h6" class="m-shoe"/>
+        <g class="anim-horiz-press">
+          <path d="M34 38h44" class="m-lever"/>
+          <circle cx="28" cy="38" r="9" class="m-disc-accent"/>
+          <circle cx="28" cy="38" r="2.8" fill="var(--card)"/>
+          <path d="M56 36h22" class="m-limb-accent"/>
+          <path d="M78 30v12" class="m-handle"/>
+        </g>
+      </svg>`,
+
+    // 71. Hammer Strength Incline Press (Reclined Backrest, Pressing Up-Forward 35°)
+    hammer_incline_press: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M22 78L48 16M38 78l14-20h26v20" class="m-frame"/>
+        <path d="M36 32l14 24" class="m-pad-stroke"/>
+        <rect x="48" y="54" width="22" height="6" rx="3" class="m-pad"/>
+        <circle cx="44" cy="26" r="5" class="m-body"/>
+        <path d="M46 32l10 22h14l6 22" class="m-body-stroke"/>
+        <g class="anim-incline-press">
+          <path d="M52 38l24-16" class="m-limb-accent"/>
+          <path d="M72 18l8 8" class="m-handle"/>
+          <circle cx="30" cy="40" r="8.5" class="m-disc-accent"/>
+          <circle cx="30" cy="40" r="2.6" fill="var(--card)"/>
+        </g>
+        <path d="M86 16l5-2-2 5" class="m-arrow anim-arrow-diag"/>
+      </svg>`,
+
+    // 72. Low-to-High Cable Crossover (Cables Anchored at BOTTOM Pulleys)
+    cable_crossover_low: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="8" y1="78" x2="112" y2="78" class="m-floor"/>
+        <path d="M16 78V12h88v66M26 78V12M94 78V12" class="m-frame"/>
+        <g class="anim-stack-up">
+          <rect x="18" y="48" width="6" height="16" rx="1.5" class="m-plate-accent"/>
+          <rect x="96" y="48" width="6" height="16" rx="1.5" class="m-plate-accent"/>
+        </g>
+        <circle cx="26" cy="70" r="3" class="m-pivot"/>
+        <circle cx="94" cy="70" r="3" class="m-pivot"/>
+        <circle cx="60" cy="28" r="5" class="m-body"/>
+        <path d="M60 34v20M60 54l-7 22M60 54l7 22" class="m-body-stroke"/>
+        <g class="anim-cross-low-l" style="transform-origin:26px 70px">
+          <line x1="26" y1="70" x2="48" y2="42" class="m-cable"/>
+          <circle cx="48" cy="42" r="3" fill="var(--accent)"/>
+        </g>
+        <g class="anim-cross-low-r" style="transform-origin:94px 70px">
+          <line x1="94" y1="70" x2="72" y2="42" class="m-cable"/>
+          <circle cx="72" cy="42" r="3" fill="var(--accent)"/>
+        </g>
+      </svg>`,
+
+    // 73. Incline Barbell Bench Press (30° Angled Bench)
+    incline_barbell_bench: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M32 78V26M42 78l14-20h26v20" class="m-frame"/>
+        <path d="M34 36l24 20h22" class="m-pad-stroke"/>
+        <circle cx="38" cy="29" r="5" class="m-body"/>
+        <path d="M42 35l18 18h18l8 23" class="m-body-stroke"/>
+        <path d="M84 76h8" class="m-shoe"/>
+        <g class="anim-bench-press">
+          <path d="M52 44V22" class="m-limb-accent"/>
+          <path d="M36 22h32" class="m-lever"/>
+          <circle cx="52" cy="22" r="9.5" class="m-disc-accent"/>
+          <circle cx="52" cy="22" r="2.8" fill="var(--card)"/>
+        </g>
+      </svg>`,
+
+    // 74. Smith Machine Bench Press (Bench Inside Vertical Smith Rails)
+    smith_bench_press: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M46 78V10h12v68M32 78V54M84 78V54" class="m-frame"/>
+        <rect x="26" y="50" width="62" height="6" rx="3" class="m-pad"/>
+        <circle cx="34" cy="44" r="5" class="m-body"/>
+        <path d="M40 46h32l14 6v24" class="m-body-stroke"/>
+        <g class="anim-bench-press">
+          <path d="M52 46V26" class="m-limb-accent"/>
+          <rect x="44" y="21" width="16" height="9" rx="2.5" class="m-plate-accent"/>
+        </g>
+      </svg>`,
+
+    // 75. Flat Dumbbell Bench Press (Two Dumbbells, Front-Angled View)
+    db_bench_press: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <rect x="46" y="50" width="28" height="7" rx="3" class="m-pad"/>
+        <path d="M52 57v21M68 57v21" class="m-frame"/>
+        <circle cx="60" cy="42" r="5" class="m-body"/>
+        <rect x="52" y="46" width="16" height="8" rx="4" class="m-body" fill-opacity="0.82"/>
+        <g class="anim-bench-press">
+          <path d="M52 48l-14-18M68 48l14-18" class="m-limb-accent"/>
+          <rect x="30" y="26" width="14" height="6" rx="2.5" class="m-plate-accent"/>
+          <rect x="76" y="26" width="14" height="6" rx="2.5" class="m-plate-accent"/>
+        </g>
+      </svg>`,
+
+    // 76. Incline Dumbbell Press (30° Bench + Dumbbells)
+    incline_db_press: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M40 78l14-20h26v20" class="m-frame"/>
+        <path d="M32 36l24 20h22" class="m-pad-stroke"/>
+        <circle cx="38" cy="29" r="5" class="m-body"/>
+        <path d="M42 35l18 18h18l8 23" class="m-body-stroke"/>
+        <g class="anim-bench-press">
+          <path d="M50 44l4-20M58 46l6-20" class="m-limb-accent"/>
+          <rect x="47" y="20" width="12" height="5.5" rx="2" class="m-plate-accent"/>
+          <rect x="58" y="22" width="12" height="5.5" rx="2" class="m-plate-accent"/>
+        </g>
+      </svg>`,
+
+    // 77. Assisted Dip Machine (Gravitron with Knee Pad & Stack)
+    gravitron_dips: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M18 78V16h16v62M34 38h56v40" class="m-frame"/>
+        <path d="M44 38h12M72 38h12" class="m-handle"/>
+        <g class="anim-stack-up">
+          <rect x="20" y="46" width="12" height="4.5" rx="1" class="m-plate"/>
+          <rect x="20" y="52" width="12" height="4.5" rx="1" class="m-plate-accent"/>
+        </g>
+        <g class="anim-dip-body">
+          <rect x="52" y="56" width="24" height="5" rx="2.5" class="m-pad-accent"/>
+          <circle cx="64" cy="20" r="5" class="m-body"/>
+          <path d="M64 26v28" class="m-body-stroke"/>
+          <path d="M58 30l-8 8M70 30l8 8" class="m-limb-accent"/>
+        </g>
+      </svg>`,
+
+    // 78. Seated Tricep Dip Machine (Seated Pressing Down with Stack)
+    tricep_dip_machine: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M18 78V18h16v60M34 58h42M66 58v20" class="m-frame"/>
+        <g class="anim-stack-up">
+          <rect x="20" y="44" width="12" height="4.5" rx="1" class="m-plate"/>
+          <rect x="20" y="50" width="12" height="4.5" rx="1" class="m-plate-accent"/>
+        </g>
+        <rect x="44" y="28" width="6" height="26" rx="3" class="m-pad"/>
+        <rect x="48" y="54" width="22" height="6" rx="3" class="m-pad"/>
+        <circle cx="56" cy="24" r="5" class="m-body"/>
+        <path d="M56 30v24h14l4 22" class="m-body-stroke"/>
+        <g class="anim-dip-body">
+          <path d="M56 36l12 10" class="m-limb-accent"/>
+          <path d="M64 46h12" class="m-handle"/>
+        </g>
+        <path d="M84 44l3 5 3-5" class="m-arrow anim-arrow-d"/>
+      </svg>`,
+
+    // 79. Knee Push-Ups (Knees Planted on Mat, Calves Raised)
+    knee_pushups: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="8" y1="78" x2="112" y2="78" class="m-floor"/>
+        <rect x="14" y="72" width="92" height="5" rx="2.5" class="m-pad"/>
+        <circle cx="34" cy="70" r="2.5" fill="var(--accent)"/>
+        <path d="M80 70l14-14" class="m-body-stroke"/>
+        <g class="anim-pushup-press" style="transform-origin:80px 70px">
+          <path d="M80 70L36 46" class="m-limb-accent"/>
+          <circle cx="28" cy="42" r="5" class="m-body"/>
+          <path d="M38 48l-4 22" class="m-body-stroke"/>
+        </g>
+      </svg>`,
+
+    // 80. Close-Grip V-Bar Lat Pulldown
+    lat_pulldown_close: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M18 78V12h56v5M34 78V12M68 58v20M56 58h24" class="m-frame"/>
+        <g class="anim-stack-up">
+          <rect x="20" y="44" width="12" height="4.5" rx="1" class="m-plate"/>
+          <rect x="20" y="50" width="12" height="4.5" rx="1" class="m-plate-accent"/>
+        </g>
+        <rect x="58" y="54" width="24" height="6" rx="3" class="m-pad"/>
+        <circle cx="56" cy="49" r="3.5" class="m-pad"/>
+        <circle cx="72" cy="30" r="5" class="m-body"/>
+        <path d="M72 36v18h-16l-3 22" class="m-body-stroke"/>
+        <circle cx="72" cy="15" r="3.2" class="m-pivot"/>
+        <g class="anim-pulldown-bar">
+          <line x1="72" y1="15" x2="72" y2="27" class="m-cable"/>
+          <path d="M66 30l6-5 6 5" class="m-handle"/>
+          <path d="M70 40l-4-10M74 40l4-10" class="m-limb-accent"/>
+        </g>
+      </svg>`,
+
+    // 81. Hammer Strength High Row (Plate-Loaded Overhead Lever)
+    hammer_high_row: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M22 78L40 16h34M56 56h24M68 56v22" class="m-frame"/>
+        <rect x="52" y="34" width="6" height="22" rx="3" class="m-pad"/>
+        <rect x="56" y="54" width="22" height="6" rx="3" class="m-pad"/>
+        <circle cx="64" cy="28" r="5" class="m-body"/>
+        <path d="M64 34v20h-12l-4 22" class="m-body-stroke"/>
+        <g class="anim-pulldown-bar">
+          <path d="M36 22l28 10" class="m-lever"/>
+          <circle cx="30" cy="22" r="8.5" class="m-disc-accent"/>
+          <circle cx="30" cy="22" r="2.5" fill="var(--card)"/>
+          <path d="M64 38l-10-8" class="m-limb-accent"/>
+        </g>
+      </svg>`,
+
+    // 82. Chest-Supported T-Bar Row (45° Prone Pad + Bottom-Pivot Lever)
+    t_bar_row: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M20 78h80M46 78l16-30" class="m-frame"/>
+        <path d="M44 48l28-14" class="m-pad-stroke"/>
+        <circle cx="76" cy="26" r="5" class="m-body"/>
+        <path d="M72 32L42 46 28 74" class="m-body-stroke"/>
+        <circle cx="24" cy="74" r="3" class="m-pivot"/>
+        <g class="anim-tbar-pull" style="transform-origin:24px 74px">
+          <path d="M24 74l58-22" class="m-lever"/>
+          <circle cx="76" cy="54" r="8.5" class="m-disc-accent"/>
+          <circle cx="76" cy="54" r="2.6" fill="var(--card)"/>
+          <path d="M66 36l6 18" class="m-limb-accent"/>
+        </g>
+      </svg>`,
+
+    // 83. Conventional Deadlift (Deep Knees, Pulling Barbell Off Floor)
+    deadlift_conv: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <g class="anim-deadlift-pull">
+          <path d="M46 74l14-14-14-14 24-18" class="m-body-stroke"/>
+          <circle cx="75" cy="23" r="5" class="m-body"/>
+          <path d="M68 32v32" class="m-limb-accent"/>
+          <circle cx="68" cy="65" r="11" class="m-disc-accent"/>
+          <circle cx="68" cy="65" r="3.2" fill="var(--card)"/>
+        </g>
+        <path d="M42 76h12" class="m-shoe"/>
+      </svg>`,
+
+    // 84. Dumbbell Romanian Deadlift (Rectangular Dumbbells, no Barbell Disc)
+    rdl_db: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M50 76l4-24" class="m-body-stroke"/>
+        <path d="M46 76h10" class="m-shoe"/>
+        <g class="anim-rdl-hinge" style="transform-origin:54px 52px">
+          <path d="M54 52l14-24" class="m-body-stroke"/>
+          <circle cx="72" cy="22" r="5" class="m-body"/>
+          <path d="M66 32l4 26" class="m-limb-accent"/>
+          <rect x="62" y="56" width="16" height="7" rx="2.5" class="m-plate-accent"/>
+        </g>
+        <circle cx="54" cy="52" r="2.8" class="m-pivot"/>
+      </svg>`,
+
+    // 85. Pendulum Squat Machine (Overhead Arc Pivot Arm)
+    pendulum_squat: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M22 78h74M26 78V14h32" class="m-frame"/>
+        <path d="M72 76l20-10" class="m-pad-stroke"/>
+        <circle cx="58" cy="14" r="3.5" class="m-pivot"/>
+        <g class="anim-pendulum" style="transform-origin:58px 14px">
+          <path d="M58 14l14 26" class="m-lever"/>
+          <circle cx="46" cy="28" r="8" class="m-disc-accent"/>
+          <circle cx="46" cy="28" r="2.5" fill="var(--card)"/>
+          <rect x="64" y="34" width="12" height="6" rx="3" class="m-pad-accent"/>
+          <circle cx="74" cy="28" r="5" class="m-body"/>
+          <path d="M72 40l-8 14 14 14" class="m-limb-accent"/>
+        </g>
+      </svg>`,
+
+    // 86. Dumbbell Sumo Squat (Wide Stance, Dumbbell Hanging Between Legs)
+    sumo_squat: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="8" y1="78" x2="112" y2="78" class="m-floor"/>
+        <g class="anim-squat-drop">
+          <circle cx="60" cy="19" r="5.5" class="m-body"/>
+          <path d="M60 25v20" class="m-body-stroke"/>
+          <path d="M60 45l-22 12-4 19M60 45l22 12 4 19" class="m-limb-accent"/>
+          <path d="M56 30l4 24M64 30l-4 24" class="m-body-stroke"/>
+          <rect x="54" y="52" width="12" height="12" rx="3" class="m-plate-accent"/>
+        </g>
+      </svg>`,
+
+    // 87. Hip Thrust Machine (Booty Builder Frame + Belt + Angled Footplate)
+    hip_thrust_machine: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="8" y1="78" x2="112" y2="78" class="m-floor"/>
+        <path d="M16 78h88M24 78V42h18v36M90 78l10-20" class="m-frame"/>
+        <rect x="24" y="40" width="18" height="10" rx="3" class="m-pad"/>
+        <path d="M84 46l6 26" class="m-body-stroke"/>
+        <g class="anim-hip-thrust" style="transform-origin:38px 44px">
+          <circle cx="32" cy="34" r="5" class="m-body"/>
+          <path d="M38 44l26 8 20-6" class="m-limb-accent"/>
+          <rect x="57" y="45" width="12" height="10" rx="3" class="m-pad-accent"/>
+          <path d="M63 55v18" class="m-lever"/>
+          <circle cx="48" cy="64" r="8" class="m-disc-accent"/>
+          <circle cx="48" cy="64" r="2.5" fill="var(--card)"/>
+        </g>
+      </svg>`,
+
+    // 88. Cable Glute Kickback (Low Cable Pulley + Ankle Strap)
+    cable_kickback: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M18 78V14h14v64" class="m-frame"/>
+        <g class="anim-stack-up">
+          <rect x="20" y="48" width="10" height="5" rx="1" class="m-plate"/>
+          <rect x="20" y="55" width="10" height="5" rx="1" class="m-plate-accent"/>
+        </g>
+        <circle cx="34" cy="70" r="3" class="m-pivot"/>
+        <circle cx="62" cy="24" r="5" class="m-body"/>
+        <path d="M62 30l-4 22v24M62 34l-26 6" class="m-body-stroke"/>
+        <circle cx="58" cy="52" r="2.8" class="m-pivot"/>
+        <g class="anim-kickback" style="transform-origin:58px 52px">
+          <path d="M58 52l16 20" class="m-limb-accent"/>
+          <circle cx="74" cy="72" r="3" fill="var(--accent)"/>
+        </g>
+        <line x1="34" y1="70" x2="74" y2="72" class="m-cable"/>
+      </svg>`,
+
+    // 89. Seated Lateral Raise Machine (Machine Seat + Arm Pads)
+    lateral_raise_machine: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="12" y1="78" x2="108" y2="78" class="m-floor"/>
+        <path d="M36 16h48M60 16v62M46 78h28" class="m-frame"/>
+        <rect x="52" y="28" width="16" height="24" rx="4" class="m-pad"/>
+        <rect x="48" y="54" width="24" height="6" rx="3" class="m-pad"/>
+        <circle cx="60" cy="22" r="5" class="m-body"/>
+        <path d="M54 58l-3 18M66 58l3 18" class="m-body-stroke"/>
+        <g class="anim-lat-l" style="transform-origin:50px 34px">
+          <path d="M50 34l-18 14" class="m-limb-accent"/>
+          <rect x="28" y="42" width="10" height="6" rx="3" class="m-pad-accent"/>
+        </g>
+        <g class="anim-lat-r" style="transform-origin:70px 34px">
+          <path d="M70 34l18 14" class="m-limb-accent"/>
+          <rect x="82" y="42" width="10" height="6" rx="3" class="m-pad-accent"/>
+        </g>
+      </svg>`,
+
+    // 90. Single-Arm Cable Lateral Raise (Low Pulley Tower + One Sweeping Arm)
+    cable_lateral_raise: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M18 78V14h14v64" class="m-frame"/>
+        <g class="anim-stack-up">
+          <rect x="20" y="48" width="10" height="5" rx="1" class="m-plate"/>
+          <rect x="20" y="55" width="10" height="5" rx="1" class="m-plate-accent"/>
+        </g>
+        <circle cx="34" cy="70" r="3" class="m-pivot"/>
+        <circle cx="64" cy="22" r="5" class="m-body"/>
+        <path d="M64 28v24M64 52l-6 24M64 52l6 24M58 34l-8 14" class="m-body-stroke"/>
+        <g class="anim-cable-lat" style="transform-origin:70px 32px">
+          <path d="M70 32l24 14" class="m-limb-accent"/>
+          <circle cx="94" cy="46" r="3" fill="var(--accent)"/>
+        </g>
+        <line x1="34" y1="70" x2="88" y2="48" class="m-cable"/>
+      </svg>`,
+
+    // 91. Seated Dumbbell Shoulder Press (Upright Bench + Two Dumbbells)
+    db_shoulder_press: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="12" y1="78" x2="108" y2="78" class="m-floor"/>
+        <rect x="52" y="32" width="16" height="24" rx="4" class="m-pad"/>
+        <rect x="46" y="56" width="28" height="6" rx="3" class="m-pad"/>
+        <path d="M60 62v16" class="m-frame"/>
+        <circle cx="60" cy="26" r="5" class="m-body"/>
+        <path d="M54 60l-5 16M66 60l5 16" class="m-body-stroke"/>
+        <g class="anim-ohp-press">
+          <path d="M52 38l-14-12M68 38l14-12" class="m-limb-accent"/>
+          <rect x="30" y="22" width="14" height="5.5" rx="2.5" class="m-plate-accent"/>
+          <rect x="76" y="22" width="14" height="5.5" rx="2.5" class="m-plate-accent"/>
+        </g>
+      </svg>`,
+
+    // 92. Dumbbell Hammer Curls (Front View Vertical Neutral-Grip Dumbbells)
+    hammer_curls: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="12" y1="78" x2="108" y2="78" class="m-floor"/>
+        <circle cx="60" cy="20" r="5.5" class="m-body"/>
+        <rect x="52" y="28" width="16" height="24" rx="6" class="m-body" fill-opacity="0.82"/>
+        <path d="M55 52l-3 24M65 52l3 24" class="m-body-stroke"/>
+        <g class="anim-shrug-up">
+          <path d="M46 32v14M74 32v14" class="m-limb-accent"/>
+          <rect x="42" y="42" width="7" height="14" rx="2.5" class="m-plate-accent"/>
+          <rect x="71" y="42" width="7" height="14" rx="2.5" class="m-plate-accent"/>
+        </g>
+      </svg>`,
+
+    // 93. Standing EZ-Bar Bicep Curl (Front View Wavy EZ-Bar)
+    ez_bar_curl: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="12" y1="78" x2="108" y2="78" class="m-floor"/>
+        <circle cx="60" cy="20" r="5.5" class="m-body"/>
+        <rect x="52" y="28" width="16" height="24" rx="6" class="m-body" fill-opacity="0.82"/>
+        <path d="M55 52l-3 24M65 52l3 24" class="m-body-stroke"/>
+        <g class="anim-barbell-row">
+          <path d="M48 34l-2 18M72 34l2 18" class="m-limb-accent"/>
+          <path d="M30 52h16l6-3h16l6 3h16" class="m-lever"/>
+          <rect x="28" y="45" width="6" height="14" rx="2" class="m-plate-accent"/>
+          <rect x="86" y="45" width="6" height="14" rx="2" class="m-plate-accent"/>
+        </g>
+      </svg>`,
+
+    // 94. Low Cable Bicep Curl (Facing Cable Tower, Low Pulley)
+    cable_bicep_curl: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="10" y1="78" x2="110" y2="78" class="m-floor"/>
+        <path d="M18 78V14h14v64" class="m-frame"/>
+        <g class="anim-stack-up">
+          <rect x="20" y="48" width="10" height="5" rx="1" class="m-plate"/>
+          <rect x="20" y="55" width="10" height="5" rx="1" class="m-plate-accent"/>
+        </g>
+        <circle cx="34" cy="70" r="3" class="m-pivot"/>
+        <circle cx="76" cy="22" r="5" class="m-body"/>
+        <path d="M76 28v24l-4 24M76 52l6 24M76 34v14" class="m-body-stroke"/>
+        <circle cx="76" cy="48" r="2.8" class="m-pivot"/>
+        <g class="anim-tricep-push" style="transform-origin:76px 48px">
+          <path d="M76 48l-20 4" class="m-limb-accent"/>
+          <circle cx="56" cy="52" r="3.2" fill="var(--accent)"/>
+        </g>
+        <line x1="34" y1="70" x2="56" y2="52" class="m-cable"/>
+      </svg>`,
+
+    // 95. Russian Twists on Floor Mat (V-Sit with Raised Heels)
+    russian_twist: `
+      <svg viewBox="0 0 120 88" fill="none" class="ex-svg">
+        <line x1="8" y1="78" x2="112" y2="78" class="m-floor"/>
+        <rect x="14" y="72" width="92" height="5" rx="2.5" class="m-pad"/>
+        <path d="M58 68l18-16 14 10" class="m-body-stroke"/>
+        <g class="anim-twist" style="transform-origin:58px 68px">
+          <path d="M58 68L40 42" class="m-limb-accent"/>
+          <circle cx="36" cy="35" r="5" class="m-body"/>
+          <path d="M46 48h20" class="m-limb-accent"/>
+          <circle cx="66" cy="48" r="4" class="m-plate-accent"/>
         </g>
       </svg>`
   };

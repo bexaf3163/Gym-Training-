@@ -49,7 +49,7 @@
       "muscle": "Грудь",
       "kind": "base",
       "day": "День 2",
-      "visual": "bench_press"
+      "visual": "incline_db_press"
     },
     {
       "id": "ex-5",
@@ -60,7 +60,7 @@
       "muscle": "Ягодицы",
       "kind": "base",
       "day": "День 1",
-      "visual": "hip_thrust"
+      "visual": "hip_thrust_machine"
     },
     {
       "id": "ex-6",
