@@ -7,7 +7,7 @@
 
   const STORAGE_KEY = 'gymnote_mark_lera_v4';
   const DB = window.GYM_DB;
-  const SYNC = window.GYM_SYNC;
+  const TG = window.TG_SYNC;
 
   const EQUIPMENT_TYPES = ['Тренажёр', 'Блок', 'Гантели', 'Штанга', 'Свой вес', 'Кардио'];
   const MUSCLE_GROUPS = ['Грудь', 'Спина', 'Ноги', 'Ягодицы', 'Плечи', 'Руки', 'Кор', 'Кардио'];
@@ -602,7 +602,12 @@
         || localStorage.getItem('gymnote_mark_lera_v3')
         || localStorage.getItem('gymnote_mark_lera_v2')
         || localStorage.getItem('gymnote_mark_lera_v1');
-      if (!raw) return createDefaultData();
+      if (!raw) {
+        const fresh = createDefaultData();
+        const preferred = TG?.detectPreferredProfile?.();
+        if (preferred) fresh.activeUser = preferred;
+        return fresh;
+      }
       const parsed = JSON.parse(raw);
       if (!parsed || !parsed.profiles || !parsed.profiles.mark || !parsed.profiles.lera) {
         return createDefaultData();
@@ -646,23 +651,18 @@
 
   function saveState(options = {}) {
     const { sync = true, touchUser = state.activeUser } = options;
+    const nowIso = new Date().toISOString();
+    state.updatedAt = nowIso;
     if (touchUser && state.profiles?.[touchUser]) {
-      state.profiles[touchUser].updatedAt = new Date().toISOString();
+      state.profiles[touchUser].updatedAt = nowIso;
     }
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
       // Ignore storage quota issues silently
     }
-    if (sync && SYNC) {
-      SYNC.schedulePush(
-        () => state,
-        (merged) => {
-          state = merged;
-          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
-          render();
-        }
-      );
+    if (sync && TG) {
+      TG.schedulePush(() => state);
     }
   }
 
@@ -901,6 +901,7 @@
     if (metaTheme) {
       metaTheme.setAttribute('content', resolvedTheme === 'dark' ? '#000000' : '#F2F2F7');
     }
+    if (TG) TG.syncTelegramChrome(resolvedTheme);
 
     const sw = document.getElementById('profile-switch');
     if (sw) sw.setAttribute('data-active', state.activeUser);
@@ -2203,19 +2204,23 @@
   }
 
   function openCloudSyncSheet() {
-    if (!SYNC) return;
-    const cfg = SYNC.getConfig();
-    const st = SYNC.getStatus();
-    const hasToken = Boolean(cfg.token);
+    if (!TG) return;
+    const inTg = TG.isInTelegram();
+    const st = TG.getStatus();
+    const tgUser = TG.getTelegramUser();
+    const userDisplay = tgUser
+      ? `${tgUser.first_name || ''}${tgUser.username ? ` (@${tgUser.username})` : ''}`.trim()
+      : '';
     const lastSyncText = st.lastSyncAt
       ? new Date(st.lastSyncAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
       : 'ещё не было';
+    const appUrl = 'https://bexaf3163.github.io/Gym-Training-/';
 
     openSheet(`
       <div class="sheet-header">
         <div>
-          <h2 class="sheet-title">Облако GitHub</h2>
-          <div style="font-size:12px;color:var(--text-secondary);">Профили Марка и Леры хранятся прямо в репозитории</div>
+          <h2 class="sheet-title">Облако Telegram</h2>
+          <div style="font-size:12px;color:var(--text-secondary);">У каждого свой личный аккаунт — без токенов и паролей</div>
         </div>
         <button type="button" class="sheet-close" data-action="close-sheet" aria-label="Закрыть">✕</button>
       </div>
@@ -2223,61 +2228,34 @@
       <div class="form-section" style="display:flex;flex-direction:column;gap:10px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
           <div>
-            <div class="ios-row-title" id="gh-sync-status-label">${escapeHtml(st.message)}</div>
-            <div class="ios-row-sub tabular">Последняя синхронизация: ${escapeHtml(lastSyncText)}</div>
+            <div class="ios-row-title" id="tg-sync-status-label">${escapeHtml(st.message)}</div>
+            <div class="ios-row-sub tabular">${inTg ? `${userDisplay ? `${escapeHtml(userDisplay)} • ` : ''}Синхронизация: ${escapeHtml(lastSyncText)}` : 'Откройте через бота Telegram для облачного хранения'}</div>
           </div>
-          <span class="tag ${st.state === 'ok' ? 'success' : (st.state === 'error' ? '' : 'accent')}">${hasToken ? 'Подключено' : 'Только чтение'}</span>
+          <span class="tag ${inTg ? 'success' : 'accent'}">${inTg ? 'Telegram' : 'Локально'}</span>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <button type="button" class="btn-secondary-full" data-action="gh-pull">↓ Загрузить</button>
-          <button type="button" class="btn-secondary-full" data-action="gh-push" ${hasToken ? '' : 'disabled style="opacity:0.45;"'}>↑ Сохранить</button>
-        </div>
-        ${hasToken ? `<button type="button" class="btn-primary-full" data-action="gh-sync-now">Синхронизировать сейчас</button>` : ''}
+        ${inTg ? `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <button type="button" class="btn-secondary-full" data-action="tg-pull">↓ Загрузить</button>
+            <button type="button" class="btn-secondary-full" data-action="tg-push">↑ Сохранить</button>
+          </div>
+          <button type="button" class="btn-primary-full" data-action="tg-sync-now">Синхронизировать сейчас</button>
+        ` : `
+          <div class="rec-banner" style="margin-bottom:0;font-size:12.5px;">
+            <strong>Как подключить Telegram за 1 минуту:</strong><br/>
+            1. Откройте <strong>@BotFather</strong> в Telegram → <code>/newbot</code> (придумайте имя, например <em>GymNote</em>).<br/>
+            2. Отправьте <code>/mybots</code> → выберите бота → <strong>Bot Settings → Menu Button → Configure menu button</strong>.<br/>
+            3. Вставьте ссылку ниже и название кнопки (например, <em>Тренировка</em>).<br/>
+            4. Откройте бота у себя и отправьте Лере — у каждого автоматически будет своё облако Telegram!
+          </div>
+          <button type="button" class="btn-primary-full" data-action="tg-copy-url" data-url="${appUrl}">Скопировать ссылку для @BotFather</button>
+        `}
       </div>
 
-      <form id="form-gh-sync">
-        <div class="form-section" style="display:flex;flex-direction:column;gap:10px;">
-          <span class="field-label" style="margin-bottom:0;">Подключение репозитория</span>
-          <div>
-            <label class="field-label" for="gh-token">GitHub Personal Access Token</label>
-            <input class="field-input" id="gh-token" type="password" autocomplete="off" placeholder="github_pat_..." value="${escapeHtml(cfg.token)}" />
-            <div style="font-size:11.5px;color:var(--text-secondary);margin-top:4px;">
-              Токен хранится только в Safari на вашем телефоне и никогда не отправляется в код репозитория.
-            </div>
-          </div>
-          <div class="field-grid-2">
-            <div>
-              <label class="field-label" for="gh-repo">Репозиторий</label>
-              <input class="field-input" id="gh-repo" type="text" required value="${escapeHtml(cfg.repo)}" />
-            </div>
-            <div>
-              <label class="field-label" for="gh-branch">Ветка</label>
-              <input class="field-input" id="gh-branch" type="text" required value="${escapeHtml(cfg.branch)}" />
-            </div>
-          </div>
-          <div>
-            <label class="field-label" for="gh-path">Файл данных в репозитории</label>
-            <input class="field-input" id="gh-path" type="text" required value="${escapeHtml(cfg.path)}" />
-          </div>
-          <label style="display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:600;padding-top:2px;">
-            <span>Авто-сохранение после изменений</span>
-            <input type="checkbox" id="gh-autosync" ${cfg.autoSync ? 'checked' : ''} style="width:20px;height:20px;accent-color:var(--accent);" />
-          </label>
-        </div>
-
-        <div class="rec-banner" style="font-size:12px;">
-          <strong>Как подключить за 1 минуту (на 2 телефона):</strong><br/>
-          1. Откройте <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700;">создание токена GitHub ›</a><br/>
-          2. Выберите <strong>Only select repositories → Gym-Training-</strong>, а в <strong>Permissions → Contents</strong> поставьте <strong>Read and write</strong>.<br/>
-          3. Скопируйте токен и вставьте сюда на iPhone Марка и Леры — профили сливаются раздельно и не затирают друг друга.
-        </div>
-
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <button type="submit" class="btn-primary-full">Сохранить и синхронизировать</button>
-          ${hasToken ? `<button type="button" class="btn-danger-full" data-action="gh-disconnect">Отключить токен на этом телефоне</button>` : ''}
-        </div>
-      </form>
+      <div class="form-section" style="display:flex;flex-direction:column;gap:8px;">
+        <span class="field-label" style="margin-bottom:0;">Отчёт в чат</span>
+        <button type="button" class="btn-secondary-full" data-action="tg-share-workout">Поделиться тренировкой в Telegram</button>
+      </div>
     `);
   }
 
@@ -2285,8 +2263,8 @@
     const cats = state.workoutCategories || ['День 1', 'День 2', 'День 3'];
     const profile = getActiveProfile();
     const actShort = ACTIVITY_LEVELS.find((a) => a.id === profile.body?.activity)?.short || 'не указана';
-    const syncCfg = SYNC ? SYNC.getConfig() : null;
-    const syncSt = SYNC ? SYNC.getStatus() : null;
+    const inTg = TG ? TG.isInTelegram() : false;
+    const syncSt = TG ? TG.getStatus() : null;
 
     openSheet(`
       <div class="sheet-header">
@@ -2296,8 +2274,8 @@
 
       <div class="form-section" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <div>
-          <div class="ios-row-title">Облако GitHub (Марк ↔ Лера)</div>
-          <div class="ios-row-sub">${syncCfg?.token ? `Подключено • ${escapeHtml(syncSt?.message || 'Готово')}` : 'Подключите токен для авто-синхронизации'}</div>
+          <div class="ios-row-title">Облако Telegram</div>
+          <div class="ios-row-sub">${inTg ? escapeHtml(syncSt?.message || 'Авто-синхронизация активна') : 'Откройте через бота Telegram для облака'}</div>
         </div>
         <button type="button" class="rule-bar-link" data-action="open-cloud-sync">Открыть ›</button>
       </div>
@@ -2468,18 +2446,18 @@
         openCloudSyncSheet();
         break;
 
-      case 'gh-pull': {
-        if (!SYNC) break;
-        SYNC.pull(state).then((res) => {
+      case 'tg-pull': {
+        if (!TG) break;
+        TG.pull(state).then((res) => {
           if (res.exists && res.merged) {
             state = res.merged;
             saveState({ sync: false, touchUser: null });
             render();
             openCloudSyncSheet();
-            showToast('Данные загружены с GitHub');
+            showToast('Данные загружены из Telegram');
           } else {
             openCloudSyncSheet();
-            showToast('Файл на GitHub ещё не создан');
+            showToast('Облако Telegram пока пустое');
           }
         }).catch((err) => {
           openCloudSyncSheet();
@@ -2488,16 +2466,11 @@
         break;
       }
 
-      case 'gh-push': {
-        if (!SYNC) break;
-        SYNC.push(state, 'Sync GymNote profiles (Mark & Lera)').then((res) => {
-          if (res.merged) {
-            state = res.merged;
-            saveState({ sync: false, touchUser: null });
-            render();
-          }
+      case 'tg-push': {
+        if (!TG) break;
+        TG.push(state).then((res) => {
           openCloudSyncSheet();
-          showToast(res.pushed ? 'Сохранено на GitHub!' : 'Сначала добавьте токен GitHub');
+          showToast(res.pushed ? 'Сохранено в облако Telegram!' : 'Откройте через Telegram-бота');
         }).catch((err) => {
           openCloudSyncSheet();
           showToast(`Ошибка сохранения: ${err.message}`);
@@ -2505,16 +2478,16 @@
         break;
       }
 
-      case 'gh-sync-now': {
-        if (!SYNC) break;
-        SYNC.syncNow(state).then((res) => {
+      case 'tg-sync-now': {
+        if (!TG) break;
+        TG.syncNow(state).then((res) => {
           if (res.merged) {
             state = res.merged;
             saveState({ sync: false, touchUser: null });
             render();
           }
           openCloudSyncSheet();
-          showToast('Синхронизация с GitHub завершена!');
+          showToast('Синхронизация с Telegram завершена!');
         }).catch((err) => {
           openCloudSyncSheet();
           showToast(`Ошибка: ${err.message}`);
@@ -2522,11 +2495,40 @@
         break;
       }
 
-      case 'gh-disconnect': {
-        if (!SYNC) break;
-        SYNC.clearToken();
-        openCloudSyncSheet();
-        showToast('Токен GitHub удалён с этого устройства');
+      case 'tg-copy-url': {
+        const url = actionEl.getAttribute('data-url') || 'https://bexaf3163.github.io/Gym-Training-/';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url)
+            .then(() => showToast('Ссылка скопирована! Вставьте её в @BotFather'))
+            .catch(() => showToast(url));
+        } else {
+          showToast(url);
+        }
+        break;
+      }
+
+      case 'tg-share-workout': {
+        const profile = getActiveProfile();
+        const activeDay = state.workoutDayFilter;
+        const planned = getUserPlanExercises(state.activeUser).filter(({ item }) => item.day === activeDay);
+        const lines = [`💪 GymNote • ${profile.name} (${activeDay})`];
+        planned.forEach(({ ex, item }) => {
+          const metric = getExMetric(ex);
+          const doneCount = item.sets.filter((s) => s.done).length;
+          const statusIcon = doneCount === item.sets.length && doneCount > 0 ? '✅' : (doneCount > 0 ? '🔹' : '▫️');
+          const detail = metric === 'cardio'
+            ? `ур. ${formatWeight(item.weight)} • ${item.sets[0]?.reps || item.minReps} мин`
+            : (metric === 'time'
+              ? `${item.sets.length}×${item.sets[0]?.reps || item.minReps}с`
+              : (item.weight === 0 ? `свой вес × ${item.sets.length} подх.` : `${formatWeight(item.weight)} кг × ${item.sets.length} подх.`));
+          lines.push(`${statusIcon} ${ex.name} — ${detail}`);
+        });
+        const text = lines.join('\n');
+        if (TG?.shareText) {
+          TG.shareText(text);
+        } else if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(text).then(() => showToast('Итог тренировки скопирован!'));
+        }
         break;
       }
 
@@ -2702,6 +2704,7 @@
           item.sets[setIdx].done = nextDone;
           if (nextDone) {
             item.sets[setIdx].weight = item.weight;
+            TG?.haptic('light');
             if (state.settings.restTimerEnabled) {
               startRestTimer(state.settings.restSeconds);
             }
@@ -2742,6 +2745,7 @@
         const topSets = item.sets.filter((s) => (typeof s.weight === 'number' ? s.weight : item.weight) === topWeight);
         const bestReps = Math.max(...(topSets.length ? topSets : item.sets).map((s) => s.reps));
         item.history.push({ date: todayISO(), weight: topWeight, reps: bestReps });
+        TG?.haptic('success');
 
         if (metric === 'time') {
           item.minReps = item.maxReps;
@@ -2803,7 +2807,11 @@
         });
 
         stopRestTimer(false);
-        saveState();
+        TG?.haptic('success');
+        saveState({ sync: false });
+        if (TG?.isInTelegram()) {
+          TG.push(state).catch(() => {});
+        }
         render();
         showToast(`${activeDay} завершён (${savedCount} упр.)!`);
         break;
@@ -3031,32 +3039,6 @@
   });
 
   document.addEventListener('submit', (e) => {
-    if (e.target.id === 'form-gh-sync') {
-      e.preventDefault();
-      if (!SYNC) return;
-      const token = (document.getElementById('gh-token')?.value || '').trim();
-      const repo = (document.getElementById('gh-repo')?.value || 'bexaf3163/Gym-Training-').trim();
-      const branch = (document.getElementById('gh-branch')?.value || 'main').trim();
-      const path = (document.getElementById('gh-path')?.value || 'data/gymnote-data.json').trim();
-      const autoSync = Boolean(document.getElementById('gh-autosync')?.checked);
-      SYNC.saveConfig({ token, repo, branch, path, autoSync });
-
-      const op = token ? SYNC.syncNow(state) : SYNC.pull(state);
-      op.then((res) => {
-        if (res.merged) {
-          state = res.merged;
-          saveState({ sync: false, touchUser: null });
-          render();
-        }
-        openCloudSyncSheet();
-        showToast(token ? 'GitHub подключён и синхронизирован!' : 'Настройки сохранены (режим чтения)');
-      }).catch((err) => {
-        openCloudSyncSheet();
-        showToast(`Ошибка GitHub: ${err.message}`);
-      });
-      return;
-    }
-
     if (e.target.id === 'form-body-profile') {
       e.preventDefault();
       const weightKg = parseFloat(document.getElementById('body-weight').value);
@@ -3218,14 +3200,15 @@
     }
   });
 
-  // Update GitHub Cloud Sync dot indicator in top bar
-  if (SYNC) {
-    SYNC.onStatusChange((st) => {
+  // Initialize Telegram Mini App & update Cloud Sync dot indicator
+  if (TG) {
+    TG.init();
+    TG.onStatusChange((st) => {
       const dot = document.getElementById('sync-dot');
       if (dot) {
         dot.className = 'sync-dot' + (st.state === 'ok' ? ' ok' : st.state === 'syncing' ? ' syncing' : st.state === 'error' ? ' error' : '');
       }
-      const lbl = document.getElementById('gh-sync-status-label');
+      const lbl = document.getElementById('tg-sync-status-label');
       if (lbl) lbl.textContent = st.message;
     });
   }
@@ -3245,19 +3228,19 @@
   }
 
   render();
-  setTimeout(checkOnboardingRequired, 180);
 
-  // Silent initial sync from GitHub on startup (when online)
-  if (SYNC && window.location.protocol.startsWith('http')) {
-    const cfg = SYNC.getConfig();
-    if (cfg.repo && cfg.path) {
-      SYNC.pull(state).then((res) => {
-        if (res.exists && res.merged) {
-          state = res.merged;
-          saveState({ sync: false, touchUser: null });
-          render();
-        }
-      }).catch(() => {});
-    }
+  if (TG && TG.isInTelegram()) {
+    TG.pull(state).then((res) => {
+      if (res.exists && res.merged) {
+        state = res.merged;
+        saveState({ sync: false, touchUser: null });
+        render();
+      }
+      checkOnboardingRequired();
+    }).catch(() => {
+      checkOnboardingRequired();
+    });
+  } else {
+    setTimeout(checkOnboardingRequired, 180);
   }
 })();
