@@ -945,6 +945,8 @@
   }
 
   function renderTimerStrip() {
+    const launchBtn = document.getElementById('btn-timer-launch');
+    if (launchBtn) launchBtn.classList.toggle('running', timerState.active);
     const container = document.getElementById('timer-container');
     if (!container) return;
     if (!timerState.active) {
@@ -974,26 +976,10 @@
 
     const allPlanned = getUserPlanExercises(state.activeUser);
     const filtered = allPlanned.filter(({ item }) => item.day === activeDay);
-
-    const totalSets = filtered.reduce((sum, { item }) => sum + item.sets.length, 0);
     const doneSets = filtered.reduce((sum, { item }) => sum + item.sets.filter((s) => s.done).length, 0);
-    const pct = totalSets ? Math.round((doneSets / totalSets) * 100) : 0;
-    const tonnage = filtered.reduce((sum, { ex, item }) => {
-      const metric = getExMetric(ex);
-      if (metric === 'cardio' || metric === 'time') return sum;
-      return sum + item.sets.reduce((sAcc, s) => {
-        if (!s.done) return sAcc;
-        const setW = typeof s.weight === 'number' ? s.weight : item.weight;
-        return sAcc + setW * s.reps;
-      }, 0);
-    }, 0);
-    const cardioMins = filtered.reduce((sum, { ex, item }) => {
-      if (getExMetric(ex) !== 'cardio') return sum;
-      return sum + item.sets.reduce((sAcc, s) => (s.done ? sAcc + s.reps : sAcc), 0);
-    }, 0);
 
     return `
-      <div class="summary-bar">
+      <div class="workout-top-row">
         <div class="day-switcher" role="tablist" aria-label="Дни тренировок">
           ${cats.map((d) => `
             <button type="button" class="day-seg-btn ${activeDay === d ? 'active' : ''}" data-action="set-day-filter" data-day="${escapeHtml(d)}" role="tab" aria-selected="${activeDay === d}">
@@ -1002,22 +988,12 @@
           `).join('')}
         </div>
 
-        <div class="summary-top">
-          <div>
-            <span class="summary-label">Подходы: </span>
-            <span class="summary-value tabular">${doneSets} из ${totalSets}${tonnage > 0 ? ` • ${Math.round(tonnage)} кг` : ''}${cardioMins > 0 ? ` • ${cardioMins} мин` : ''}</span>
-          </div>
-          <button type="button" class="timer-launch-pill tabular" data-action="start-timer-manual" title="Запустить таймер отдыха">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-              <circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M9.5 2h5"/>
-            </svg>
-            <span>${state.settings.restSeconds}с</span>
-          </button>
-        </div>
-
-        <div class="progress-track">
-          <div class="progress-fill" style="width:${pct}%"></div>
-        </div>
+        <button type="button" class="timer-launch-pill tabular ${timerState.active ? 'running' : ''}" id="btn-timer-launch" data-action="start-timer-manual" title="Запустить таймер отдыха">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M9.5 2h5"/>
+          </svg>
+          <span>${state.settings.restSeconds}с</span>
+        </button>
       </div>
 
       ${filtered.length > 0 ? `
