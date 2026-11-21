@@ -2268,8 +2268,23 @@
 
     openSheet(`
       <div class="sheet-header">
-        <h2 class="sheet-title">Настройки</h2>
+        <h2 class="sheet-title">Профиль и настройки</h2>
         <button type="button" class="sheet-close" data-action="close-sheet">✕</button>
+      </div>
+
+      <div class="form-section" style="display:flex;flex-direction:column;gap:8px;">
+        <span class="field-label" style="margin-bottom:0;">Активный профиль</span>
+        <div class="profile-switch" id="profile-switch" data-active="${escapeHtml(state.activeUser)}" style="width:100%;" role="tablist" aria-label="Выбор профиля">
+          <div class="profile-switch-thumb" aria-hidden="true"></div>
+          <button type="button" class="profile-btn ${state.activeUser === 'mark' ? 'active' : ''}" id="btn-user-mark" data-user-btn="mark" role="tab" aria-selected="${state.activeUser === 'mark'}">
+            <span class="profile-dot mark"></span>
+            <span>Марк</span>
+          </button>
+          <button type="button" class="profile-btn ${state.activeUser === 'lera' ? 'active' : ''}" id="btn-user-lera" data-user-btn="lera" role="tab" aria-selected="${state.activeUser === 'lera'}">
+            <span class="profile-dot lera"></span>
+            <span>Лера</span>
+          </button>
+        </div>
       </div>
 
       <div class="form-section" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">

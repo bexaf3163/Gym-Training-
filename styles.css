@@ -1274,7 +1274,7 @@ button:active {
 /* Toast Notification */
 .toast {
   position: fixed;
-  top: calc(70px + var(--safe-top));
+  top: calc(14px + var(--safe-top));
   left: 50%;
   transform: translateX(-50%) translateY(-16px);
   z-index: 60;
