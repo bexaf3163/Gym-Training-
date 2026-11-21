@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gymnote-v16';
+const CACHE_NAME = 'gymnote-v17';
 const ASSETS = [
   './',
   './index.html',
@@ -7,7 +7,9 @@ const ASSETS = [
   './telegram-sync.js',
   './app.js',
   './manifest.webmanifest',
-  './icon.svg'
+  './icon.svg',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
