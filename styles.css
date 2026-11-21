@@ -2066,6 +2066,146 @@ button:active {
   to { transform: rotate(6deg); }
 }
 
+/* Additional Biomechanically Accurate Exercise Animations */
+.anim-shrug-up { animation: animShrugUp 1.6s ease-in-out infinite alternate; }
+.anim-leg-curl-seated { animation: animLegCurlSeated 2.1s ease-in-out infinite alternate; }
+.anim-kickback { animation: animKickback 2.0s ease-in-out infinite alternate; }
+.anim-add-close-l { animation: animAddCloseL 2.1s ease-in-out infinite alternate; }
+.anim-add-close-r { animation: animAddCloseR 2.1s ease-in-out infinite alternate; }
+.anim-rev-pec-l { animation: animRevPecL 2.1s ease-in-out infinite alternate; }
+.anim-rev-pec-r { animation: animRevPecR 2.1s ease-in-out infinite alternate; }
+.anim-skull-ext { animation: animSkullExt 2.0s ease-in-out infinite alternate; }
+.anim-leg-raise-up { animation: animLegRaiseUp 2.1s ease-in-out infinite alternate; }
+.anim-superman { animation: animSuperman 2.2s ease-in-out infinite alternate; }
+.anim-twist { animation: animTwist 1.9s ease-in-out infinite alternate; }
+.anim-burpee-jump { animation: animBurpeeJump 1.4s ease-in-out infinite alternate; }
+.anim-horiz-press { animation: animHorizPress 2.1s ease-in-out infinite alternate; }
+.anim-pull-straight { animation: animPullStraight 2.0s ease-in-out infinite alternate; }
+.anim-barbell-row { animation: animBarbellRow 1.9s ease-in-out infinite alternate; }
+.anim-face-pull { animation: animFacePull 1.9s ease-in-out infinite alternate; }
+.anim-step-up { animation: animStepUp 1.8s ease-in-out infinite alternate; }
+.anim-tricep-oh { animation: animTricepOh 2.0s ease-in-out infinite alternate; }
+.anim-db-fly-l { animation: animDbFlyL 2.1s ease-in-out infinite alternate; }
+.anim-db-fly-r { animation: animDbFlyR 2.1s ease-in-out infinite alternate; }
+.anim-glute-floor { animation: animGluteFloor 2.1s ease-in-out infinite alternate; }
+.anim-back-ext-seated { animation: animBackExtSeated 2.1s ease-in-out infinite alternate; }
+.anim-dip-body { animation: animDipBody 2.0s ease-in-out infinite alternate; }
+
+@keyframes animShrugUp {
+  from { transform: translateY(2px); }
+  to { transform: translateY(-6px); }
+}
+
+@keyframes animLegCurlSeated {
+  from { transform: rotate(-42deg); }
+  to { transform: rotate(12deg); }
+}
+
+@keyframes animKickback {
+  from { transform: rotate(6deg); }
+  to { transform: rotate(-48deg); }
+}
+
+@keyframes animAddCloseL {
+  from { transform: rotate(22deg); }
+  to { transform: rotate(-8deg); }
+}
+
+@keyframes animAddCloseR {
+  from { transform: rotate(-22deg); }
+  to { transform: rotate(8deg); }
+}
+
+@keyframes animRevPecL {
+  from { transform: rotate(-16deg); }
+  to { transform: rotate(26deg); }
+}
+
+@keyframes animRevPecR {
+  from { transform: rotate(16deg); }
+  to { transform: rotate(-26deg); }
+}
+
+@keyframes animSkullExt {
+  from { transform: rotate(-52deg); }
+  to { transform: rotate(12deg); }
+}
+
+@keyframes animLegRaiseUp {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-68deg); }
+}
+
+@keyframes animSuperman {
+  from { transform: translateY(3px) scaleY(0.95); }
+  to { transform: translateY(-4px) scaleY(1.04); }
+}
+
+@keyframes animTwist {
+  from { transform: rotate(-14deg); }
+  to { transform: rotate(14deg); }
+}
+
+@keyframes animBurpeeJump {
+  from { transform: translateY(10px) scaleY(0.86); }
+  to { transform: translateY(-8px) scaleY(1.03); }
+}
+
+@keyframes animHorizPress {
+  from { transform: translateX(0px); }
+  to { transform: translateX(13px); }
+}
+
+@keyframes animPullStraight {
+  from { transform: rotate(-38deg); }
+  to { transform: rotate(24deg); }
+}
+
+@keyframes animBarbellRow {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-13px); }
+}
+
+@keyframes animFacePull {
+  from { transform: translateX(0px); }
+  to { transform: translateX(13px); }
+}
+
+@keyframes animStepUp {
+  from { transform: translateY(10px); }
+  to { transform: translateY(-5px); }
+}
+
+@keyframes animTricepOh {
+  from { transform: rotate(-46deg); }
+  to { transform: rotate(14deg); }
+}
+
+@keyframes animDbFlyL {
+  from { transform: rotate(-48deg); }
+  to { transform: rotate(8deg); }
+}
+
+@keyframes animDbFlyR {
+  from { transform: rotate(48deg); }
+  to { transform: rotate(-8deg); }
+}
+
+@keyframes animGluteFloor {
+  from { transform: rotate(14deg); }
+  to { transform: rotate(-12deg); }
+}
+
+@keyframes animBackExtSeated {
+  from { transform: rotate(18deg); }
+  to { transform: rotate(-16deg); }
+}
+
+@keyframes animDipBody {
+  from { transform: translateY(0px); }
+  to { transform: translateY(13px); }
+}
+
 
 
 

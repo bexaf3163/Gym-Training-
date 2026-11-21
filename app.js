@@ -618,7 +618,7 @@
       (parsed.exercises || []).forEach((ex) => {
         const match = DB?.EXERCISES_LIBRARY.find((l) => (ex.key && l.key === ex.key) || l.name === ex.name) || DB?.findLibraryMatch(ex.name);
         if (match) {
-          if (!ex.visual) ex.visual = match.visual;
+          ex.visual = match.visual;
           if (!ex.en) ex.en = match.en;
           if (!ex.key) ex.key = match.key;
           if (!ex.kind && match.kind) ex.kind = match.kind;
@@ -724,6 +724,20 @@
   function getExKind(ex) {
     if (!ex) return 'base';
     return DB ? DB.getExerciseKind(ex) : (ex.kind || 'base');
+  }
+
+  function renderUniqueTags(tags) {
+    const seen = new Set();
+    return tags
+      .filter((t) => {
+        if (!t || !t.text) return false;
+        const norm = String(t.text).trim().toLowerCase();
+        if (!norm || seen.has(norm)) return false;
+        seen.add(norm);
+        return true;
+      })
+      .map((t) => `<span class="tag${t.cls ? ` ${t.cls}` : ''}">${escapeHtml(t.text)}</span>`)
+      .join('');
   }
 
   function getActiveProfile() {
@@ -1053,8 +1067,10 @@
             </button>
             <div class="ex-meta" data-action="open-edit-sheet" data-ex-id="${ex.id}" style="cursor:pointer;">
               <div class="ex-tags">
-                <span class="tag accent">${escapeHtml(ex.equipment)}</span>
-                <span class="tag">${escapeHtml(ex.muscle)}</span>
+                ${renderUniqueTags([
+                  { text: ex.equipment, cls: 'accent' },
+                  { text: ex.muscle }
+                ])}
               </div>
               <h2 class="ex-name">${escapeHtml(ex.name)}</h2>
             </div>
@@ -1533,9 +1549,11 @@
           </button>
           <div class="catalog-main" data-action="open-edit-sheet" data-ex-id="${ex.id}">
             <div class="ex-tags">
-              <span class="tag accent">${escapeHtml(ex.equipment)}</span>
-              <span class="tag">${escapeHtml(ex.muscle)}</span>
-              ${otherInPlan ? `<span class="tag">У ${escapeHtml(otherName === 'Марк' ? 'Марка' : 'Леры')}</span>` : ''}
+              ${renderUniqueTags([
+                { text: ex.equipment, cls: 'accent' },
+                { text: ex.muscle },
+                otherInPlan ? { text: `У ${otherName === 'Марк' ? 'Марка' : 'Леры'}` } : null
+              ])}
             </div>
             <div style="font-size:15px;font-weight:700;margin-top:2px;">${escapeHtml(ex.name)}</div>
             <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">
@@ -1761,11 +1779,13 @@
             <div class="lib-row-title">${escapeHtml(lib.name)}</div>
             <div class="lib-row-en">${escapeHtml(lib.en)}</div>
             <div class="lib-row-tags" style="flex-wrap:wrap;">
-              <span class="tag accent">${escapeHtml(kindLabel)}</span>
-              <span class="tag">${escapeHtml(lib.muscle)}</span>
-              <span class="tag">${escapeHtml(lib.equipment)}</span>
-              <span class="tag tabular">${smartBadge}</span>
-              ${alreadyExists ? `<span class="tag success">В базе</span>` : ''}
+              ${renderUniqueTags([
+                { text: kindLabel, cls: 'accent' },
+                { text: lib.muscle },
+                { text: lib.equipment },
+                { text: smartBadge, cls: 'tabular' },
+                alreadyExists ? { text: 'В базе', cls: 'success' } : null
+              ])}
             </div>
           </div>
           <span class="lib-row-chevron">›</span>
@@ -1842,9 +1862,11 @@
           <div class="ex-thumb lg">${DB.getVisualSvg(visualKey)}</div>
           <div style="margin-top:10px;">
             <div class="ex-tags">
-              <span class="tag accent">${escapeHtml(DB.getKindLabel(initialKind))}</span>
-              <span class="tag">${escapeHtml(libItem.muscle)}</span>
-              <span class="tag">${escapeHtml(libItem.equipment)}</span>
+              ${renderUniqueTags([
+                { text: DB.getKindLabel(initialKind), cls: 'accent' },
+                { text: libItem.muscle },
+                { text: libItem.equipment }
+              ])}
             </div>
             <div style="font-size:16px;font-weight:700;margin-top:3px;">${escapeHtml(libItem.name)}</div>
             <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">На тренажёре может быть написано: ${escapeHtml(libItem.en)}</div>
@@ -2040,8 +2062,10 @@
         <div class="ex-thumb lg">${getVisualForExercise(ex)}</div>
         <div style="margin-top:12px;">
           <div class="ex-tags">
-            <span class="tag accent">${escapeHtml(ex.equipment)}</span>
-            <span class="tag">${escapeHtml(ex.muscle)}</span>
+            ${renderUniqueTags([
+              { text: ex.equipment, cls: 'accent' },
+              { text: ex.muscle }
+            ])}
           </div>
           <div style="font-size:18px;font-weight:700;margin-top:4px;">${escapeHtml(ex.name)}</div>
           ${ex.en ? `<div style="font-size:13px;color:var(--text-secondary);margin-top:2px;">Английская маркировка: ${escapeHtml(ex.en)}</div>` : ''}
