@@ -64,6 +64,36 @@
     return null;
   }
 
+  function getMachineStep(ex) {
+    if (!ex) return 2.5;
+    const metric = DB ? DB.getExerciseMetric(ex) : (ex.metric || 'weight');
+    if (metric === 'cardio') return 1;
+    if (metric === 'time') return 10;
+    const kind = DB ? DB.getExerciseKind(ex) : (ex.kind || 'base');
+    const eq = ex.equipment || '';
+    const muscle = ex.muscle || '';
+    const nameL = (ex.name || '').toLowerCase();
+
+    // Гантели, свой вес, руки, плечи, кор и штанга на верх тела — шаг 2.5 кг
+    if (eq === 'Гантели' || eq === 'Свой вес') return 2.5;
+    if (['Руки', 'Плечи', 'Кор'].includes(muscle)) return 2.5;
+    if (eq === 'Штанга' && !['Ноги', 'Ягодицы'].includes(muscle)) return 2.5;
+
+    // Изолирующие блоки и тренажёры (кроссовер, бабочка, пулловер, махи ногой) — шаг 2.5 кг
+    if (/кроссовер|бабочк|пулловер|разводк|сведение рук|мах|отведение ноги/.test(nameL)) {
+      return 2.5;
+    }
+
+    // Ноги и ягодицы (тренажёры, блок, Смит, штанга) — шаг 5 кг
+    if (['Ноги', 'Ягодицы'].includes(muscle)) return 5;
+
+    // Крупные базовые тренажёры / блок / Смит на спину и грудь — шаг 5 кг
+    if (kind === 'base' && ['Тренажёр', 'Блок', 'Смит'].includes(eq) && ['Спина', 'Грудь'].includes(muscle)) {
+      return 5;
+    }
+    return 2.5;
+  }
+
   // Детально проработанные готовые схемы прогрессии отдельно для Марка и Леры
   const PROGRESSION_SCHEMES = {
     mark: [
@@ -77,13 +107,13 @@
           const special = cardioAndTimeRule(ex, activity, false, false);
           if (special) return special;
           const kind = DB ? DB.getExerciseKind(ex) : 'base';
-          const isLower = ['Ноги', 'Ягодицы'].includes(ex?.muscle);
-          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 18, step: 2.5, sets: 3 };
+          const step = getMachineStep(ex);
+          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 18, step, sets: 3 };
           if (kind === 'isolation') {
-            return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: 15, step: ex?.equipment === 'Гантели' ? 1 : 2.5, sets: 3 };
+            return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: 15, step, sets: 3 };
           }
           const sets = activity === 'low' ? 3 : 4;
-          return { ruleType: 'double', metric: 'weight', minReps: 8, maxReps: 12, step: isLower ? 5 : 2.5, sets };
+          return { ruleType: 'double', metric: 'weight', minReps: 8, maxReps: 12, step, sets };
         }
       },
       {
@@ -96,11 +126,11 @@
           const special = cardioAndTimeRule(ex, activity, true, false);
           if (special) return special;
           const kind = DB ? DB.getExerciseKind(ex) : 'base';
-          const isLower = ['Ноги', 'Ягодицы'].includes(ex?.muscle);
-          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 15, maxReps: 20, step: 2.5, sets: 3 };
-          if (kind === 'isolation') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 16, step: 1.25, sets: 3 };
+          const step = getMachineStep(ex);
+          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 15, maxReps: 20, step, sets: 3 };
+          if (kind === 'isolation') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 16, step, sets: 3 };
           const sets = activity === 'high' ? 4 : 3;
-          return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: 14, step: isLower && activity !== 'low' ? 5 : 2.5, sets };
+          return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: 14, step, sets };
         }
       },
       {
@@ -113,11 +143,11 @@
           const special = cardioAndTimeRule(ex, activity, false, false);
           if (special) return special;
           const kind = DB ? DB.getExerciseKind(ex) : 'base';
-          const isLower = ['Ноги', 'Ягодицы'].includes(ex?.muscle);
-          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: 15, step: 2.5, sets: 3 };
-          if (kind === 'isolation') return { ruleType: 'double', metric: 'weight', minReps: 8, maxReps: 12, step: 2, sets: 3 };
+          const step = getMachineStep(ex);
+          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: 15, step, sets: 3 };
+          if (kind === 'isolation') return { ruleType: 'double', metric: 'weight', minReps: 8, maxReps: 12, step, sets: 3 };
           const sets = activity === 'low' ? 3 : 4;
-          return { ruleType: 'double', metric: 'weight', minReps: 5, maxReps: 8, step: isLower ? 5 : 2.5, sets };
+          return { ruleType: 'double', metric: 'weight', minReps: 5, maxReps: 8, step, sets };
         }
       }
     ],
@@ -133,12 +163,13 @@
           if (special) return special;
           const kind = DB ? DB.getExerciseKind(ex) : 'base';
           const isLower = ['Ноги', 'Ягодицы'].includes(ex?.muscle);
-          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 15, maxReps: 20, step: 1, sets: 3 };
+          const step = getMachineStep(ex);
+          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 15, maxReps: 20, step, sets: 3 };
           if (kind === 'isolation') {
-            return { ruleType: 'double', metric: 'weight', minReps: 14, maxReps: 18, step: isLower ? 2.5 : 1, sets: 3 };
+            return { ruleType: 'double', metric: 'weight', minReps: 14, maxReps: 18, step, sets: 3 };
           }
           const sets = isLower && activity !== 'low' ? 4 : 3;
-          return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: isLower ? 15 : 16, step: isLower && activity !== 'low' ? 5 : 2.5, sets };
+          return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: isLower ? 15 : 16, step, sets };
         }
       },
       {
@@ -152,10 +183,11 @@
           if (special) return special;
           const kind = DB ? DB.getExerciseKind(ex) : 'base';
           const isLower = ['Ноги', 'Ягодицы'].includes(ex?.muscle);
-          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 18, step: 1.25, sets: 3 };
-          if (kind === 'isolation') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 15, step: isLower ? 2.5 : 1.25, sets: 3 };
+          const step = getMachineStep(ex);
+          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 18, step, sets: 3 };
+          if (kind === 'isolation') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 15, step, sets: 3 };
           const sets = isLower && activity !== 'low' ? 4 : 3;
-          return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: isLower ? 12 : 14, step: isLower ? 5 : 2.5, sets };
+          return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: isLower ? 12 : 14, step, sets };
         }
       },
       {
@@ -169,10 +201,11 @@
           if (special) return special;
           const kind = DB ? DB.getExerciseKind(ex) : 'base';
           const isLower = ['Ноги', 'Ягодицы'].includes(ex?.muscle);
-          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 16, step: 2.5, sets: 3 };
-          if (kind === 'isolation') return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: 14, step: isLower ? 2.5 : 1.25, sets: 3 };
+          const step = getMachineStep(ex);
+          if (kind === 'core') return { ruleType: 'double', metric: 'weight', minReps: 12, maxReps: 16, step, sets: 3 };
+          if (kind === 'isolation') return { ruleType: 'double', metric: 'weight', minReps: 10, maxReps: 14, step, sets: 3 };
           const sets = activity === 'low' ? 3 : 4;
-          return { ruleType: 'double', metric: 'weight', minReps: 8, maxReps: isLower ? 10 : 12, step: isLower ? 5 : 2.5, sets };
+          return { ruleType: 'double', metric: 'weight', minReps: 8, maxReps: isLower ? 10 : 12, step, sets };
         }
       }
     ]
@@ -366,7 +399,7 @@
               day: 'День 2',
               setupNote: '',
               weight: 24,
-              step: 2,
+              step: 2.5,
               ruleType: 'double',
               minReps: 8,
               maxReps: 12,
@@ -639,8 +672,15 @@
         if (!prof.activeSchemeId) {
           prof.activeSchemeId = uid === 'lera' ? 'lera-slim-glutes' : 'mark-mass';
         }
-        Object.values(prof.items || {}).forEach((it) => {
+        Object.entries(prof.items || {}).forEach(([exId, it]) => {
           if (!parsed.workoutCategories.includes(it.day)) it.day = primaryCat;
+          const exObj = (parsed.exercises || []).find((e) => e.id === exId);
+          if (exObj) {
+            const metric = DB ? DB.getExerciseMetric(exObj) : (exObj.metric || 'weight');
+            if (metric === 'weight' && it.step !== 2.5 && it.step !== 5) {
+              it.step = getMachineStep(exObj);
+            }
+          }
         });
       });
       return parsed;
@@ -761,9 +801,13 @@
       const minReps = defaults.minReps ?? smart.minReps;
       const maxReps = defaults.maxReps ?? smart.maxReps;
       const setsCount = defaults.sets ?? smart.sets ?? 3;
+      const existingOrders = Object.values(profile.items || {})
+        .map((it) => (typeof it.order === 'number' ? it.order : -1));
+      const nextOrder = existingOrders.length ? Math.max(...existingOrders, state.exercises.length) + 1 : 0;
       profile.items[exId] = {
         inPlan: defaults.inPlan ?? false,
         day: defaults.day ?? getDefaultCategory(),
+        order: defaults.order ?? nextOrder,
         setupNote: defaults.setupNote ?? '',
         weight: startW,
         step,
@@ -818,8 +862,38 @@
   function getUserPlanExercises(userId = state.activeUser) {
     const profile = state.profiles[userId];
     return state.exercises
-      .filter((ex) => profile.items[ex.id] && profile.items[ex.id].inPlan)
-      .map((ex) => ({ ex, item: profile.items[ex.id] }));
+      .map((ex, idx) => ({ ex, item: profile.items[ex.id], idx }))
+      .filter((entry) => entry.item && entry.item.inPlan)
+      .sort((a, b) => {
+        const oa = typeof a.item.order === 'number' ? a.item.order : a.idx;
+        const ob = typeof b.item.order === 'number' ? b.item.order : b.idx;
+        return oa - ob || a.idx - b.idx;
+      })
+      .map(({ ex, item }) => ({ ex, item }));
+  }
+
+  function reorderDayExercises(userId, day, orderedExIds) {
+    const profile = state.profiles[userId];
+    if (!profile) return;
+    orderedExIds.forEach((id, idx) => {
+      if (profile.items[id] && profile.items[id].day === day) {
+        profile.items[id].order = idx;
+      }
+    });
+  }
+
+  function moveExerciseInDay(userId, exId, direction) {
+    const activeDay = state.workoutDayFilter;
+    const list = getUserPlanExercises(userId).filter(({ item }) => item.day === activeDay);
+    const ids = list.map(({ ex }) => ex.id);
+    const idx = ids.indexOf(exId);
+    const targetIdx = idx + direction;
+    if (idx < 0 || targetIdx < 0 || targetIdx >= ids.length) return false;
+    const tmp = ids[idx];
+    ids[idx] = ids[targetIdx];
+    ids[targetIdx] = tmp;
+    reorderDayExercises(userId, activeDay, ids);
+    return true;
   }
 
   function explainRulePlain(item, ex = null) {
@@ -1004,8 +1078,8 @@
       </div>
 
       ${filtered.length > 0 ? `
-        <div class="card-stack">
-          ${filtered.map(({ ex, item }) => renderExerciseWorkoutCard(ex, item)).join('')}
+        <div class="card-stack" id="workout-card-stack">
+          ${filtered.map(({ ex, item }, idx) => renderExerciseWorkoutCard(ex, item, idx, filtered.length)).join('')}
         </div>
 
         <button type="button" class="finish-workout-btn" data-action="finish-workout" ${doneSets === 0 ? 'disabled' : ''}>
@@ -1021,28 +1095,38 @@
     `;
   }
 
-  function renderExerciseWorkoutCard(ex, item) {
+  function renderExerciseWorkoutCard(ex, item, cardIdx = 0, totalCount = 1) {
     const metric = getExMetric(ex);
     const kind = getExKind(ex);
     const isBodyweightZero = item.weight === 0 && (metric === 'time' || kind === 'bodyweight' || kind === 'core');
     const ready = isReadyToProgress(item);
+    const held = Boolean(ready && item.holdWeight);
+    const showUpgrade = ready && !held;
     const nextWeight = formatWeight(item.weight + item.step);
 
     const topNum = isBodyweightZero ? 'Свой' : formatWeight(item.weight);
     const topUnit = metric === 'cardio' ? 'ур.' : (isBodyweightZero ? 'вес' : 'кг');
     const repUnit = metric === 'cardio' ? 'мин' : (metric === 'time' ? 'сек' : 'повт.');
 
-    let ctaLabel = `Цель достигнута → Поднять до ${nextWeight} кг`;
+    let ctaLabel = `Поднять до ${nextWeight} кг`;
+    let holdLabel = `Оставить ${formatWeight(item.weight)} кг`;
+    let heldText = `Вес оставлен: ${formatWeight(item.weight)} кг`;
     if (metric === 'cardio') {
-      ctaLabel = `Цель достигнута → Поднять до ур. ${nextWeight}`;
+      ctaLabel = `Поднять до ур. ${nextWeight}`;
+      holdLabel = `Оставить ур. ${formatWeight(item.weight)}`;
+      heldText = `Уровень оставлен: ур. ${formatWeight(item.weight)}`;
     } else if (metric === 'time') {
-      ctaLabel = `Цель достигнута → Новая цель ${item.maxReps + item.step} сек`;
+      ctaLabel = `Цель ${item.maxReps + item.step} сек`;
+      holdLabel = 'Оставить так';
+      heldText = `Цель оставлена: ${item.minReps}–${item.maxReps} сек`;
     } else if (isBodyweightZero) {
-      ctaLabel = `Цель достигнута → Поднять до ${item.minReps + 2}–${item.maxReps + 2} повт.`;
+      ctaLabel = `Цель ${item.minReps + 2}–${item.maxReps + 2} повт.`;
+      holdLabel = 'Оставить так';
+      heldText = `Цель оставлена: ${item.minReps}–${item.maxReps} повт.`;
     }
 
     return `
-      <article class="exercise-card ${ready ? 'ready-progress' : ''}">
+      <article class="exercise-card ${showUpgrade ? 'ready-progress' : ''}" data-ex-id="${ex.id}">
         <div class="ex-top">
           <div class="ex-head-left">
             <button type="button" class="ex-thumb" data-action="open-visual-preview" data-ex-id="${ex.id}" title="Показать визуализацию тренажёра">
@@ -1061,7 +1145,7 @@
 
           <div class="weight-stepper">
             <button type="button" class="step-btn" data-action="weight-step" data-ex-id="${ex.id}" data-delta="-1" aria-label="Уменьшить">−</button>
-            <button type="button" class="weight-readout tabular" data-action="open-weight-sheet" data-ex-id="${ex.id}" title="Ввести вручную">
+            <button type="button" class="weight-readout tabular" data-action="open-weight-sheet" data-ex-id="${ex.id}" title="Ввести вручную или сменить шаг">
               <span class="weight-num">${topNum}</span>
               <span class="weight-unit">${topUnit}</span>
             </button>
@@ -1104,13 +1188,40 @@
             <button type="button" class="text-action-btn" data-action="add-set" data-ex-id="${ex.id}">${metric === 'cardio' ? '+ Интервал' : '+ Подход'}</button>
             ${item.sets.length > 1 ? `<button type="button" class="text-action-btn" data-action="remove-set" data-ex-id="${ex.id}">${metric === 'cardio' ? '− Интервал' : '− Подход'}</button>` : ''}
           </div>
-          <button type="button" class="text-action-btn" style="color:var(--danger);opacity:0.85;" data-action="open-remove-sheet" data-ex-id="${ex.id}">Удалить</button>
+          <div class="card-right-actions">
+            ${totalCount > 1 ? `
+              <div class="reorder-group" aria-label="Порядок упражнения">
+                <button type="button" class="reorder-btn" data-action="move-ex-up" data-ex-id="${ex.id}" ${cardIdx === 0 ? 'disabled' : ''} aria-label="Поднять выше" title="Выше">↑</button>
+                <button type="button" class="reorder-btn" data-action="move-ex-down" data-ex-id="${ex.id}" ${cardIdx === totalCount - 1 ? 'disabled' : ''} aria-label="Опустить ниже" title="Ниже">↓</button>
+                <button type="button" class="reorder-btn drag-handle" data-drag-ex-id="${ex.id}" aria-label="Перетащить блок" title="Потяните, чтобы поменять порядок">
+                  <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true">
+                    <circle cx="5.5" cy="3.5" r="1.25"/><circle cx="10.5" cy="3.5" r="1.25"/>
+                    <circle cx="5.5" cy="8" r="1.25"/><circle cx="10.5" cy="8" r="1.25"/>
+                    <circle cx="5.5" cy="12.5" r="1.25"/><circle cx="10.5" cy="12.5" r="1.25"/>
+                  </svg>
+                </button>
+              </div>
+            ` : ''}
+            <button type="button" class="text-action-btn" style="color:var(--danger);opacity:0.85;" data-action="open-remove-sheet" data-ex-id="${ex.id}">Удалить</button>
+          </div>
         </div>
 
-        ${ready ? `
-          <button type="button" class="progress-cta" data-action="apply-progression" data-ex-id="${ex.id}">
-            <span>${ctaLabel}</span>
-          </button>
+        ${showUpgrade ? `
+          <div class="progress-cta-row">
+            <button type="button" class="progress-cta" data-action="apply-progression" data-ex-id="${ex.id}">
+              <span>${ctaLabel}</span>
+            </button>
+            <button type="button" class="progress-hold-btn" data-action="hold-weight" data-ex-id="${ex.id}">
+              <span>${holdLabel}</span>
+            </button>
+          </div>
+        ` : ''}
+
+        ${held ? `
+          <div class="hold-status-row">
+            <span>${heldText}</span>
+            <button type="button" class="hold-undo-btn" data-action="unhold-weight" data-ex-id="${ex.id}">Повысить ›</button>
+          </div>
         ` : ''}
       </article>
     `;
@@ -2157,9 +2268,20 @@
         <button type="button" class="sheet-close" data-action="close-sheet">✕</button>
       </div>
       <form id="form-direct-weight" data-ex-id="${ex.id}">
-        <div class="form-section">
-          <label class="field-label" for="direct-weight-input">${label}</label>
-          <input class="field-input tabular" id="direct-weight-input" type="number" step="0.25" min="0" value="${item.weight}" style="font-size:22px;font-weight:700;text-align:center;" />
+        <div class="form-section" style="display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <label class="field-label" for="direct-weight-input">${label}</label>
+            <input class="field-input tabular" id="direct-weight-input" type="number" step="0.5" min="0" value="${item.weight}" style="font-size:22px;font-weight:700;text-align:center;" />
+          </div>
+          ${metric === 'weight' ? `
+            <div>
+              <span class="field-label">Шаг прибавки (+ / − и прогрессия)</span>
+              <div class="ios-segment">
+                <button type="button" class="ios-segment-btn ${item.step === 2.5 ? 'active' : ''}" data-action="set-item-step" data-ex-id="${ex.id}" data-step="2.5">2.5 кг</button>
+                <button type="button" class="ios-segment-btn ${item.step === 5 ? 'active' : ''}" data-action="set-item-step" data-ex-id="${ex.id}" data-step="5">5 кг</button>
+              </div>
+            </div>
+          ` : ''}
         </div>
         <button type="submit" class="btn-primary-full">${btnText}</button>
       </form>
@@ -2696,6 +2818,65 @@
         const minVal = metric === 'cardio' ? 1 : 0;
         const stepSize = metric === 'time' ? 2.5 : item.step;
         item.weight = Math.max(minVal, Math.round((item.weight + delta * stepSize) * 100) / 100);
+        delete item.holdWeight;
+        saveState();
+        render();
+        break;
+      }
+
+      case 'set-item-step': {
+        const nextStep = parseFloat(actionEl.getAttribute('data-step'));
+        if (nextStep === 2.5 || nextStep === 5) {
+          const item = ensureUserItem(state.activeUser, exId);
+          item.step = nextStep;
+          TG?.haptic('light');
+          saveState();
+          render();
+          openWeightInputSheet(exId);
+          showToast(`Шаг прибавки: ${formatWeight(nextStep)} кг`);
+        }
+        break;
+      }
+
+      case 'move-ex-up': {
+        if (moveExerciseInDay(state.activeUser, exId, -1)) {
+          TG?.haptic('light');
+          saveState();
+          render();
+        }
+        break;
+      }
+
+      case 'move-ex-down': {
+        if (moveExerciseInDay(state.activeUser, exId, 1)) {
+          TG?.haptic('light');
+          saveState();
+          render();
+        }
+        break;
+      }
+
+      case 'hold-weight': {
+        const ex = state.exercises.find((x) => x.id === exId);
+        const metric = getExMetric(ex);
+        const item = ensureUserItem(state.activeUser, exId);
+        item.holdWeight = true;
+        TG?.haptic('light');
+        saveState();
+        render();
+        showToast(
+          metric === 'cardio'
+            ? `Уровень ${formatWeight(item.weight)} оставлен на следующую тренировку`
+            : (metric === 'weight' && item.weight > 0
+              ? `Вес ${formatWeight(item.weight)} кг оставлен — закрепим ещё раз`
+              : 'Текущая цель оставлена — закрепим ещё раз')
+        );
+        break;
+      }
+
+      case 'unhold-weight': {
+        const item = ensureUserItem(state.activeUser, exId);
+        delete item.holdWeight;
         saveState();
         render();
         break;
@@ -2731,6 +2912,7 @@
             }
           } else {
             delete item.sets[setIdx].weight;
+            delete item.holdWeight;
           }
           saveState();
           render();
@@ -2762,6 +2944,7 @@
         const metric = getExMetric(ex);
         const kind = getExKind(ex);
         const item = ensureUserItem(state.activeUser, exId);
+        delete item.holdWeight;
         const topWeight = Math.max(...item.sets.map((s) => (typeof s.weight === 'number' ? s.weight : item.weight)), item.weight);
         const topSets = item.sets.filter((s) => (typeof s.weight === 'number' ? s.weight : item.weight) === topWeight);
         const bestReps = Math.max(...(topSets.length ? topSets : item.sets).map((s) => s.reps));
@@ -2812,6 +2995,7 @@
           const topSets = doneSets.filter((s) => (typeof s.weight === 'number' ? s.weight : item.weight) === topWeight);
           const bestReps = Math.max(...topSets.map((s) => s.reps));
           item.weight = topWeight;
+          delete item.holdWeight;
 
           const last = item.history[item.history.length - 1];
           if (last && last.date === today) {
@@ -3195,6 +3379,7 @@
       if (!Number.isNaN(val) && val >= 0) {
         const item = ensureUserItem(state.activeUser, exId);
         item.weight = Math.round(val * 100) / 100;
+        delete item.holdWeight;
         saveState();
         closeSheet(true);
         render();
@@ -3220,6 +3405,93 @@
       showToast('Запись добавлена в график');
     }
   });
+
+  // Smooth touch & pointer drag-and-drop for workout exercise cards via .drag-handle
+  let dragState = null;
+
+  document.addEventListener('pointerdown', (e) => {
+    const handle = e.target.closest('.drag-handle');
+    if (!handle) return;
+    const card = handle.closest('.exercise-card[data-ex-id]');
+    const stack = document.getElementById('workout-card-stack');
+    if (!card || !stack) return;
+
+    e.preventDefault();
+    try { handle.setPointerCapture(e.pointerId); } catch {}
+    card.classList.add('dragging');
+    TG?.haptic('medium');
+    dragState = {
+      card,
+      stack,
+      handle,
+      pointerId: e.pointerId,
+      lastY: e.clientY,
+      offsetY: 0,
+      moved: false
+    };
+  });
+
+  document.addEventListener('pointermove', (e) => {
+    if (!dragState || e.pointerId !== dragState.pointerId) return;
+    e.preventDefault();
+
+    const { card, stack } = dragState;
+    dragState.offsetY += (e.clientY - dragState.lastY);
+    dragState.lastY = e.clientY;
+    card.style.transform = `translateY(${dragState.offsetY}px) scale(1.015)`;
+
+    const cardRect = card.getBoundingClientRect();
+    const cardMid = cardRect.top + cardRect.height / 2;
+
+    const prev = card.previousElementSibling;
+    if (prev && prev.classList.contains('exercise-card')) {
+      const prevRect = prev.getBoundingClientRect();
+      if (cardMid < prevRect.top + prevRect.height / 2) {
+        const beforeTop = card.getBoundingClientRect().top;
+        stack.insertBefore(card, prev);
+        const afterTop = card.getBoundingClientRect().top;
+        dragState.offsetY -= (afterTop - beforeTop);
+        card.style.transform = `translateY(${dragState.offsetY}px) scale(1.015)`;
+        dragState.moved = true;
+        TG?.haptic('light');
+      }
+    }
+
+    const next = card.nextElementSibling;
+    if (next && next.classList.contains('exercise-card')) {
+      const nextRect = next.getBoundingClientRect();
+      if (cardMid > nextRect.top + nextRect.height / 2) {
+        const beforeTop = card.getBoundingClientRect().top;
+        stack.insertBefore(next, card);
+        const afterTop = card.getBoundingClientRect().top;
+        dragState.offsetY -= (afterTop - beforeTop);
+        card.style.transform = `translateY(${dragState.offsetY}px) scale(1.015)`;
+        dragState.moved = true;
+        TG?.haptic('light');
+      }
+    }
+  }, { passive: false });
+
+  function finishCardDrag(e) {
+    if (!dragState || (e && e.pointerId !== dragState.pointerId)) return;
+    const { card, stack, handle, pointerId, moved } = dragState;
+    dragState = null;
+    try { handle.releasePointerCapture(pointerId); } catch {}
+    card.classList.remove('dragging');
+    card.style.transform = '';
+    if (moved) {
+      const orderedIds = Array.from(stack.querySelectorAll('.exercise-card[data-ex-id]'))
+        .map((el) => el.getAttribute('data-ex-id'))
+        .filter(Boolean);
+      reorderDayExercises(state.activeUser, state.workoutDayFilter, orderedIds);
+      saveState();
+      render();
+      showToast('Порядок упражнений сохранён');
+    }
+  }
+
+  document.addEventListener('pointerup', finishCardDrag);
+  document.addEventListener('pointercancel', finishCardDrag);
 
   // Initialize Telegram Mini App & update Cloud Sync dot indicator
   if (TG) {
