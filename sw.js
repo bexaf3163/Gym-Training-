@@ -1,11 +1,11 @@
-const CACHE_NAME = 'gymnote-v18';
+const CACHE_NAME = 'gymnote-v19';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css',
-  './exercises-db.js',
-  './telegram-sync.js',
-  './app.js',
+  './styles.css?v=19',
+  './exercises-db.js?v=19',
+  './telegram-sync.js?v=19',
+  './app.js?v=19',
   './manifest.webmanifest',
   './icon.svg',
   './icon-192.png',
@@ -32,18 +32,18 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const reqUrl = new URL(event.request.url);
   if (reqUrl.origin !== self.location.origin) return;
+
+  // Network-first so Telegram WebView always gets matching HTML + CSS + JS,
+  // with instant offline cache fallback when signal is lost in the gym.
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const networkFetch = fetch(event.request)
-        .then((response) => {
-          if (response && response.status === 200) {
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || networkFetch;
-    })
+    fetch(event.request)
+      .then((response) => {
+        if (response && response.status === 200) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
