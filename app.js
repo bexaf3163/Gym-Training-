@@ -1266,7 +1266,7 @@
             </button>
             <div>
               <h2 class="chart-title">${escapeHtml(selectedEx.name)}</h2>
-              <div class="chart-sub">${escapeHtml(selectedEx.equipment)} • ${escapeHtml(selectedEx.muscle)}</div>
+              <div class="chart-sub">${escapeHtml(selectedEx.equipment === selectedEx.muscle ? selectedEx.equipment : `${selectedEx.equipment} • ${selectedEx.muscle}`)}</div>
             </div>
           </div>
           <div class="chart-big-val tabular">
