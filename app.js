@@ -906,13 +906,19 @@
     const sw = document.getElementById('profile-switch');
     if (sw) sw.setAttribute('data-active', state.activeUser);
 
+    const activeProf = getActiveProfile();
+    const profInit = document.getElementById('tab-profile-initial');
+    if (profInit) profInit.textContent = (activeProf.name || 'М').charAt(0).toUpperCase();
+    const profLabel = document.getElementById('tab-profile-label');
+    if (profLabel) profLabel.textContent = activeProf.name || 'Профиль';
+
     document.querySelectorAll('[data-user-btn]').forEach((btn) => {
       const isActive = btn.getAttribute('data-user-btn') === state.activeUser;
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-selected', String(isActive));
     });
 
-    document.querySelectorAll('.tab-btn').forEach((btn) => {
+    document.querySelectorAll('.tab-btn[data-tab]').forEach((btn) => {
       btn.classList.toggle('active', btn.getAttribute('data-tab') === state.activeTab);
     });
   }

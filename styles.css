@@ -263,9 +263,24 @@ button:active {
   height: 17px;
 }
 
+/* Floating Rest Timer Host (0px when idle) */
+.timer-floating-host {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding: calc(8px + var(--safe-top)) 16px 8px;
+  background: var(--glass);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--separator);
+}
+
+.timer-floating-host:empty {
+  display: none;
+}
+
 /* Rest Timer Banner */
 .timer-strip {
-  margin-top: 9px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -302,7 +317,7 @@ button:active {
 /* Main Scrollable Content */
 .main-content {
   flex: 1;
-  padding: 16px 16px calc(94px + var(--safe-bottom));
+  padding: calc(10px + var(--safe-top)) 16px calc(92px + var(--safe-bottom));
 }
 
 /* Section Headers */
@@ -1070,7 +1085,7 @@ button:active {
   margin: 0 0 16px;
 }
 
-/* Bottom iOS Tab Bar */
+/* Bottom iOS Tab Bar (5 thumb-zone slots) */
 .tab-bar {
   position: fixed;
   bottom: 0;
@@ -1080,8 +1095,9 @@ button:active {
   max-width: 480px;
   z-index: 30;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 7px 8px calc(8px + var(--safe-bottom));
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  padding: 6px 4px calc(7px + var(--safe-bottom));
   background: var(--glass-tab);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -1094,10 +1110,11 @@ button:active {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  padding: 3px 0;
+  padding: 3px 2px;
   color: var(--text-tertiary);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
+  min-width: 0;
 }
 
 .tab-btn.active {
@@ -1105,8 +1122,64 @@ button:active {
 }
 
 .tab-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.tab-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 0;
+}
+
+.tab-add-pill {
+  width: 46px;
+  height: 36px;
+  border-radius: 13px;
+  background: var(--accent);
+  color: var(--accent-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.34);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+[data-user="lera"] .tab-add-pill {
+  box-shadow: 0 4px 12px rgba(232, 62, 107, 0.34);
+}
+
+.tab-add-btn:active .tab-add-pill {
+  transform: scale(0.93);
+}
+
+.tab-add-pill svg {
+  width: 22px;
+  height: 22px;
+}
+
+.tab-avatar {
+  position: relative;
   width: 24px;
   height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.tab-avatar .sync-dot {
+  top: -2px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--card);
 }
 
 /* Bottom Sheet Modal */
