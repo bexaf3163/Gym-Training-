@@ -1,0 +1,19 @@
+{
+  "name": "GymNote — Марк и Лера",
+  "short_name": "GymNote",
+  "description": "Трекер тренировок, прогрессии нагрузок и тренажёров для Марка и Леры",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2F2F7",
+  "theme_color": "#F2F2F7",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

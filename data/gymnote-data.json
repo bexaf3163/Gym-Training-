@@ -1,0 +1,731 @@
+{
+  "schemaVersion": 4,
+  "syncedAt": "2026-11-21T19:43:34.414Z",
+  "workoutCategories": [
+    "День 1",
+    "День 2",
+    "День 3"
+  ],
+  "exercises": [
+    {
+      "id": "ex-1",
+      "key": "chest-press-machine",
+      "name": "Жим от груди в тренажёре сидя",
+      "en": "Seated Chest Press Machine",
+      "equipment": "Тренажёр",
+      "muscle": "Грудь",
+      "kind": "base",
+      "day": "День 1",
+      "visual": "chest_press_machine"
+    },
+    {
+      "id": "ex-2",
+      "key": "lat-pulldown",
+      "name": "Тяга верхнего блока",
+      "en": "Lat Pulldown",
+      "equipment": "Блок",
+      "muscle": "Спина",
+      "kind": "base",
+      "day": "День 1",
+      "visual": "lat_pulldown"
+    },
+    {
+      "id": "ex-3",
+      "key": "leg-press-45",
+      "name": "Жим ногами под 45°",
+      "en": "45° Leg Press Machine",
+      "equipment": "Тренажёр",
+      "muscle": "Ноги",
+      "kind": "base",
+      "day": "День 1",
+      "visual": "leg_press"
+    },
+    {
+      "id": "ex-4",
+      "key": "incline-db-press",
+      "name": "Жим гантелей на наклонной скамье",
+      "en": "Incline Dumbbell Press",
+      "equipment": "Гантели",
+      "muscle": "Грудь",
+      "kind": "base",
+      "day": "День 2",
+      "visual": "bench_press"
+    },
+    {
+      "id": "ex-5",
+      "key": "hip-thrust-machine",
+      "name": "Ягодичный мост в тренажёре",
+      "en": "Hip Thrust / Booty Builder Machine",
+      "equipment": "Тренажёр",
+      "muscle": "Ягодицы",
+      "kind": "base",
+      "day": "День 1",
+      "visual": "hip_thrust"
+    },
+    {
+      "id": "ex-6",
+      "key": "seated-cable-row",
+      "name": "Тяга горизонтального блока",
+      "en": "Seated Cable Row",
+      "equipment": "Блок",
+      "muscle": "Спина",
+      "kind": "base",
+      "day": "День 2",
+      "visual": "cable_row"
+    },
+    {
+      "id": "ex-7",
+      "key": "pec-deck",
+      "name": "Сведение рук в тренажёре (Бабочка)",
+      "en": "Pec Deck / Butterfly Fly",
+      "equipment": "Тренажёр",
+      "muscle": "Грудь",
+      "kind": "isolation",
+      "day": "День 3",
+      "visual": "pec_deck"
+    },
+    {
+      "id": "ex-8",
+      "key": "leg-extension",
+      "name": "Разгибание ног сидя в тренажёре",
+      "en": "Seated Leg Extension",
+      "equipment": "Тренажёр",
+      "muscle": "Ноги",
+      "kind": "isolation",
+      "day": "День 2",
+      "visual": "leg_extension"
+    },
+    {
+      "id": "ex-9",
+      "key": "hip-abduction",
+      "name": "Разведение ног в тренажёре",
+      "en": "Seated Hip Abduction Machine",
+      "equipment": "Тренажёр",
+      "muscle": "Ягодицы",
+      "kind": "isolation",
+      "day": "День 2",
+      "visual": "abduction"
+    },
+    {
+      "id": "ex-10",
+      "key": "shoulder-press-machine",
+      "name": "Жим плечами в тренажёре сидя",
+      "en": "Seated Shoulder Press Machine",
+      "equipment": "Тренажёр",
+      "muscle": "Плечи",
+      "kind": "base",
+      "day": "День 3",
+      "visual": "shoulder_press"
+    }
+  ],
+  "profiles": {
+    "mark": {
+      "name": "Марк",
+      "activeSchemeId": "mark-mass",
+      "body": {
+        "weightKg": null,
+        "heightCm": null,
+        "activity": "",
+        "completed": false
+      },
+      "items": {
+        "ex-1": {
+          "inPlan": true,
+          "day": "День 1",
+          "setupNote": "",
+          "weight": 65,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 8,
+          "maxReps": 12,
+          "sets": [
+            {
+              "reps": 12,
+              "done": true,
+              "weight": 62.5
+            },
+            {
+              "reps": 12,
+              "done": true,
+              "weight": 65
+            },
+            {
+              "reps": 11,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-14",
+              "weight": 57.5,
+              "reps": 10
+            },
+            {
+              "date": "2026-10-21",
+              "weight": 60,
+              "reps": 10
+            },
+            {
+              "date": "2026-10-28",
+              "weight": 60,
+              "reps": 12
+            },
+            {
+              "date": "2026-11-04",
+              "weight": 62.5,
+              "reps": 11
+            },
+            {
+              "date": "2026-11-12",
+              "weight": 65,
+              "reps": 10
+            }
+          ]
+        },
+        "ex-2": {
+          "inPlan": true,
+          "day": "День 1",
+          "setupNote": "",
+          "weight": 60,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 8,
+          "maxReps": 12,
+          "sets": [
+            {
+              "reps": 12,
+              "done": true,
+              "weight": 60
+            },
+            {
+              "reps": 12,
+              "done": true,
+              "weight": 60
+            },
+            {
+              "reps": 12,
+              "done": true,
+              "weight": 60
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-14",
+              "weight": 52.5,
+              "reps": 10
+            },
+            {
+              "date": "2026-10-24",
+              "weight": 55,
+              "reps": 11
+            },
+            {
+              "date": "2026-11-05",
+              "weight": 57.5,
+              "reps": 12
+            },
+            {
+              "date": "2026-11-14",
+              "weight": 60,
+              "reps": 10
+            }
+          ]
+        },
+        "ex-3": {
+          "inPlan": true,
+          "day": "День 1",
+          "setupNote": "",
+          "weight": 140,
+          "step": 5,
+          "ruleType": "double",
+          "minReps": 8,
+          "maxReps": 12,
+          "sets": [
+            {
+              "reps": 10,
+              "done": false
+            },
+            {
+              "reps": 10,
+              "done": false
+            },
+            {
+              "reps": 10,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-15",
+              "weight": 125,
+              "reps": 10
+            },
+            {
+              "date": "2026-10-26",
+              "weight": 130,
+              "reps": 12
+            },
+            {
+              "date": "2026-11-07",
+              "weight": 135,
+              "reps": 12
+            },
+            {
+              "date": "2026-11-16",
+              "weight": 140,
+              "reps": 10
+            }
+          ]
+        },
+        "ex-4": {
+          "inPlan": true,
+          "day": "День 2",
+          "setupNote": "",
+          "weight": 24,
+          "step": 2,
+          "ruleType": "double",
+          "minReps": 8,
+          "maxReps": 12,
+          "sets": [
+            {
+              "reps": 9,
+              "done": false
+            },
+            {
+              "reps": 9,
+              "done": false
+            },
+            {
+              "reps": 8,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-18",
+              "weight": 20,
+              "reps": 10
+            },
+            {
+              "date": "2026-11-01",
+              "weight": 22,
+              "reps": 11
+            },
+            {
+              "date": "2026-11-12",
+              "weight": 24,
+              "reps": 9
+            }
+          ]
+        },
+        "ex-6": {
+          "inPlan": true,
+          "day": "День 2",
+          "setupNote": "",
+          "weight": 55,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 8,
+          "maxReps": 12,
+          "sets": [
+            {
+              "reps": 10,
+              "done": false
+            },
+            {
+              "reps": 10,
+              "done": false
+            },
+            {
+              "reps": 10,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-11-10",
+              "weight": 55,
+              "reps": 10
+            }
+          ]
+        },
+        "ex-8": {
+          "inPlan": true,
+          "day": "День 2",
+          "setupNote": "",
+          "weight": 60,
+          "step": 5,
+          "ruleType": "double",
+          "minReps": 10,
+          "maxReps": 15,
+          "sets": [
+            {
+              "reps": 12,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-11-10",
+              "weight": 60,
+              "reps": 12
+            }
+          ]
+        },
+        "ex-7": {
+          "inPlan": true,
+          "day": "День 3",
+          "setupNote": "",
+          "weight": 50,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 10,
+          "maxReps": 15,
+          "sets": [
+            {
+              "reps": 12,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-11-11",
+              "weight": 50,
+              "reps": 12
+            }
+          ]
+        },
+        "ex-10": {
+          "inPlan": true,
+          "day": "День 3",
+          "setupNote": "",
+          "weight": 45,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 8,
+          "maxReps": 12,
+          "sets": [
+            {
+              "reps": 10,
+              "done": false
+            },
+            {
+              "reps": 10,
+              "done": false
+            },
+            {
+              "reps": 10,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-11-11",
+              "weight": 45,
+              "reps": 10
+            }
+          ]
+        }
+      }
+    },
+    "lera": {
+      "name": "Лера",
+      "activeSchemeId": "lera-slim-glutes",
+      "body": {
+        "weightKg": null,
+        "heightCm": null,
+        "activity": "",
+        "completed": false
+      },
+      "items": {
+        "ex-5": {
+          "inPlan": true,
+          "day": "День 1",
+          "setupNote": "",
+          "weight": 60,
+          "step": 5,
+          "ruleType": "double",
+          "minReps": 12,
+          "maxReps": 15,
+          "sets": [
+            {
+              "reps": 15,
+              "done": true,
+              "weight": 55
+            },
+            {
+              "reps": 15,
+              "done": true,
+              "weight": 60
+            },
+            {
+              "reps": 15,
+              "done": true,
+              "weight": 60
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-14",
+              "weight": 45,
+              "reps": 12
+            },
+            {
+              "date": "2026-10-23",
+              "weight": 50,
+              "reps": 14
+            },
+            {
+              "date": "2026-11-02",
+              "weight": 55,
+              "reps": 15
+            },
+            {
+              "date": "2026-11-14",
+              "weight": 60,
+              "reps": 13
+            }
+          ]
+        },
+        "ex-3": {
+          "inPlan": true,
+          "day": "День 1",
+          "setupNote": "",
+          "weight": 70,
+          "step": 5,
+          "ruleType": "double",
+          "minReps": 12,
+          "maxReps": 15,
+          "sets": [
+            {
+              "reps": 13,
+              "done": true,
+              "weight": 70
+            },
+            {
+              "reps": 13,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-16",
+              "weight": 55,
+              "reps": 12
+            },
+            {
+              "date": "2026-10-27",
+              "weight": 60,
+              "reps": 14
+            },
+            {
+              "date": "2026-11-06",
+              "weight": 65,
+              "reps": 15
+            },
+            {
+              "date": "2026-11-15",
+              "weight": 70,
+              "reps": 13
+            }
+          ]
+        },
+        "ex-2": {
+          "inPlan": true,
+          "day": "День 1",
+          "setupNote": "",
+          "weight": 30,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 12,
+          "maxReps": 16,
+          "sets": [
+            {
+              "reps": 13,
+              "done": false
+            },
+            {
+              "reps": 13,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-15",
+              "weight": 25,
+              "reps": 12
+            },
+            {
+              "date": "2026-10-29",
+              "weight": 27.5,
+              "reps": 15
+            },
+            {
+              "date": "2026-11-13",
+              "weight": 30,
+              "reps": 13
+            }
+          ]
+        },
+        "ex-9": {
+          "inPlan": true,
+          "day": "День 2",
+          "setupNote": "",
+          "weight": 45,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 14,
+          "maxReps": 18,
+          "sets": [
+            {
+              "reps": 15,
+              "done": false
+            },
+            {
+              "reps": 15,
+              "done": false
+            },
+            {
+              "reps": 15,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-11-12",
+              "weight": 45,
+              "reps": 15
+            }
+          ]
+        },
+        "ex-6": {
+          "inPlan": true,
+          "day": "День 2",
+          "setupNote": "",
+          "weight": 27.5,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 12,
+          "maxReps": 16,
+          "sets": [
+            {
+              "reps": 12,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-20",
+              "weight": 22.5,
+              "reps": 12
+            },
+            {
+              "date": "2026-11-03",
+              "weight": 25,
+              "reps": 15
+            },
+            {
+              "date": "2026-11-15",
+              "weight": 27.5,
+              "reps": 12
+            }
+          ]
+        },
+        "ex-8": {
+          "inPlan": true,
+          "day": "День 3",
+          "setupNote": "",
+          "weight": 35,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 14,
+          "maxReps": 18,
+          "sets": [
+            {
+              "reps": 15,
+              "done": false
+            },
+            {
+              "reps": 15,
+              "done": false
+            },
+            {
+              "reps": 15,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-11-12",
+              "weight": 35,
+              "reps": 15
+            }
+          ]
+        },
+        "ex-1": {
+          "inPlan": true,
+          "day": "День 3",
+          "setupNote": "",
+          "weight": 22.5,
+          "step": 2.5,
+          "ruleType": "double",
+          "minReps": 12,
+          "maxReps": 16,
+          "sets": [
+            {
+              "reps": 12,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            },
+            {
+              "reps": 12,
+              "done": false
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-11-08",
+              "weight": 22.5,
+              "reps": 12
+            }
+          ]
+        }
+      }
+    }
+  }
+}

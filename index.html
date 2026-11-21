@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru" data-user="mark" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>GymNote — Марк и Лера</title>
+  <meta name="description" content="Удобный iOS-трекер для зала: прогрессия весов, подходы и тренажёры для Марка и Леры." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="GymNote" />
+  <meta name="theme-color" content="#F2F2F7" id="meta-theme-color" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <!-- Top iOS Frosted Header -->
+    <header class="top-bar">
+      <div class="top-bar-row">
+        <div class="profile-switch" id="profile-switch" data-active="mark" role="tablist" aria-label="Выбор профиля">
+          <div class="profile-switch-thumb" aria-hidden="true"></div>
+          <button type="button" class="profile-btn active" id="btn-user-mark" data-user-btn="mark" role="tab" aria-selected="true">
+            <span class="profile-dot mark"></span>
+            <span>Марк</span>
+          </button>
+          <button type="button" class="profile-btn" id="btn-user-lera" data-user-btn="lera" role="tab" aria-selected="false">
+            <span class="profile-dot lera"></span>
+            <span>Лера</span>
+          </button>
+        </div>
+
+        <div class="top-actions">
+          <button type="button" class="icon-pill-btn primary" id="btn-quick-add" title="Добавить упражнение или тренажёр">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span>Добавить</span>
+          </button>
+          <button type="button" class="icon-pill-btn sync-btn" id="btn-sync-cloud" aria-label="Синхронизация с GitHub" title="Синхронизация с GitHub">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+            </svg>
+            <span class="sync-dot" id="sync-dot"></span>
+          </button>
+          <button type="button" class="icon-pill-btn" id="btn-open-settings" aria-label="Настройки и резервная копия">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="timer-container"></div>
+    </header>
+
+    <!-- Main Screen View -->
+    <main class="main-content" id="main-content"></main>
+
+    <!-- Bottom iOS Tab Bar -->
+    <nav class="tab-bar" aria-label="Навигация">
+      <button type="button" class="tab-btn active" data-tab="workout" id="tab-workout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6.5 9.5v5m11-5v5M4 10.5v3m16-3v3M6.5 12h11"/>
+        </svg>
+        <span>Тренировка</span>
+      </button>
+      <button type="button" class="tab-btn" data-tab="progression" id="tab-progression">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 17l5-5 4 3 7-8m0 0h-4m4 0v4"/>
+        </svg>
+        <span>Прогрессия</span>
+      </button>
+      <button type="button" class="tab-btn" data-tab="catalog" id="tab-catalog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="4" rx="1.5"/>
+          <rect x="3" y="10" width="18" height="4" rx="1.5"/>
+          <rect x="3" y="16" width="12" height="4" rx="1.5"/>
+        </svg>
+        <span>Тренажёры</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- iOS Bottom Sheet Backdrop -->
+  <div class="sheet-backdrop" id="sheet-backdrop" aria-hidden="true">
+    <div class="sheet" id="sheet-content" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./exercises-db.js"></script>
+  <script src="./github-sync.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
