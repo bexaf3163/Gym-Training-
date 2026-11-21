@@ -310,6 +310,35 @@
     return false;
   }
 
+  function applySafeAreas() {
+    const tg = getTg();
+    if (!tg || typeof document === 'undefined') return;
+    try {
+      const root = document.documentElement;
+      const saTop = Number(tg.safeAreaInset?.top || 0);
+      const csaTop = Number(tg.contentSafeAreaInset?.top || 0);
+      const saBottom = Number(tg.safeAreaInset?.bottom || 0);
+      const csaBottom = Number(tg.contentSafeAreaInset?.bottom || 0);
+
+      let topPx = saTop + csaTop;
+      const bottomPx = saBottom + csaBottom;
+
+      // Fallback for Telegram iOS floating "Закрыть / ..." pills when contentSafeAreaInset isn't reported
+      if (topPx === 0 && tg.platform === 'ios') {
+        const cs = window.getComputedStyle(root);
+        const cssTop =
+          (parseFloat(cs.getPropertyValue('--tg-safe-area-inset-top')) || 0) +
+          (parseFloat(cs.getPropertyValue('--tg-content-safe-area-inset-top')) || 0);
+        if (cssTop === 0) {
+          topPx = 52;
+        }
+      }
+
+      root.style.setProperty('--tg-js-safe-top', `${Math.max(0, Math.round(topPx))}px`);
+      root.style.setProperty('--tg-js-safe-bottom', `${Math.max(0, Math.round(bottomPx))}px`);
+    } catch {}
+  }
+
   function init() {
     const tg = getTg();
     const active = isInTelegram();
@@ -318,6 +347,13 @@
       try {
         tg.ready();
         tg.expand();
+        applySafeAreas();
+        if (typeof tg.onEvent === 'function') {
+          tg.onEvent('safeAreaChanged', applySafeAreas);
+          tg.onEvent('contentSafeAreaChanged', applySafeAreas);
+          tg.onEvent('fullscreenChanged', applySafeAreas);
+          tg.onEvent('viewportChanged', applySafeAreas);
+        }
       } catch {}
     }
     setStatus({

@@ -1,11 +1,11 @@
-const CACHE_NAME = 'gymnote-v20';
+const CACHE_NAME = 'gymnote-v21';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css?v=20',
-  './exercises-db.js?v=20',
-  './telegram-sync.js?v=20',
-  './app.js?v=20',
+  './styles.css?v=21',
+  './exercises-db.js?v=21',
+  './telegram-sync.js?v=21',
+  './app.js?v=21',
   './manifest.webmanifest',
   './icon.svg',
   './icon-192.png',
