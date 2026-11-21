@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gymnote-v13';
+const CACHE_NAME = 'gymnote-v14';
 const ASSETS = [
   './',
   './index.html',

@@ -978,12 +978,47 @@ button:active {
 .catalog-item {
   background: var(--card);
   border-radius: var(--radius-md);
-  padding: 13px 14px;
+  padding: 12px 14px;
   box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.catalog-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+
+.catalog-tip {
+  font-size: 12.5px;
+  line-height: 1.38;
+  color: var(--text-secondary);
+  background: var(--fill);
+  border-radius: 10px;
+  padding: 7px 10px;
+}
+
+.catalog-tip strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.how-to-box {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: 11px;
+  background: var(--fill);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text);
+  text-align: left;
+}
+
+.how-to-box strong {
+  color: var(--accent);
 }
 
 .catalog-main {

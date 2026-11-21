@@ -1518,29 +1518,34 @@
         if (item.setupNote) subText += ` • ${escapeHtml(item.setupNote)}`;
       }
 
+      const howTo = DB ? DB.getHowToTip(ex) : '';
+
       return `
         <div class="catalog-item">
-          <button type="button" class="ex-thumb" data-action="open-visual-preview" data-ex-id="${ex.id}" title="Показать тренажёр">
-            ${getVisualForExercise(ex)}
-          </button>
-          <div class="catalog-main" data-action="open-edit-sheet" data-ex-id="${ex.id}">
-            <div class="ex-tags">
-              ${renderUniqueTags([
-                { text: ex.equipment, cls: 'accent' },
-                { text: ex.muscle },
-                otherInPlan ? { text: `У ${otherName === 'Марк' ? 'Марка' : 'Леры'}` } : null
-              ])}
-            </div>
-            <div style="font-size:15px;font-weight:700;margin-top:2px;">${escapeHtml(ex.name)}</div>
-            <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">
-              ${subText}
-            </div>
-          </div>
-          <div class="catalog-right">
-            <button type="button" class="plan-toggle ${inPlan ? 'in-plan' : ''}" data-action="toggle-in-plan" data-ex-id="${ex.id}">
-              ${inPlan ? 'В плане ✓' : '+ В план'}
+          <div class="catalog-top">
+            <button type="button" class="ex-thumb" data-action="open-visual-preview" data-ex-id="${ex.id}" title="Показать тренажёр">
+              ${getVisualForExercise(ex)}
             </button>
+            <div class="catalog-main" data-action="open-edit-sheet" data-ex-id="${ex.id}">
+              <div class="ex-tags">
+                ${renderUniqueTags([
+                  { text: ex.equipment, cls: 'accent' },
+                  { text: ex.muscle },
+                  otherInPlan ? { text: `У ${otherName === 'Марк' ? 'Марка' : 'Леры'}` } : null
+                ])}
+              </div>
+              <div style="font-size:15px;font-weight:700;margin-top:2px;">${escapeHtml(ex.name)}</div>
+              <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">
+                ${subText}
+              </div>
+            </div>
+            <div class="catalog-right">
+              <button type="button" class="plan-toggle ${inPlan ? 'in-plan' : ''}" data-action="toggle-in-plan" data-ex-id="${ex.id}">
+                ${inPlan ? 'В плане ✓' : '+ В план'}
+              </button>
+            </div>
           </div>
+          ${howTo ? `<div class="catalog-tip"><strong>Как делать:</strong> ${escapeHtml(howTo)}</div>` : ''}
         </div>
       `;
     }).join('');
@@ -1846,6 +1851,7 @@
             </div>
             <div style="font-size:16px;font-weight:700;margin-top:3px;">${escapeHtml(libItem.name)}</div>
             <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">На тренажёре может быть написано: ${escapeHtml(libItem.en)}</div>
+            ${DB?.getHowToTip(libItem) ? `<div class="how-to-box"><strong>Как делать:</strong> ${escapeHtml(DB.getHowToTip(libItem))}</div>` : ''}
           </div>
         </div>
       ` : ''}
@@ -2045,6 +2051,7 @@
           </div>
           <div style="font-size:18px;font-weight:700;margin-top:4px;">${escapeHtml(ex.name)}</div>
           ${ex.en ? `<div style="font-size:13px;color:var(--text-secondary);margin-top:2px;">Английская маркировка: ${escapeHtml(ex.en)}</div>` : ''}
+          ${DB?.getHowToTip(ex) ? `<div class="how-to-box"><strong>Как делать:</strong> ${escapeHtml(DB.getHowToTip(ex))}</div>` : ''}
         </div>
       </div>
 
