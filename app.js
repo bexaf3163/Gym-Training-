@@ -647,14 +647,14 @@
       parsed.workoutCategories = ['День 1', 'День 2', 'День 3'];
     }
     const primaryCat = parsed.workoutCategories[0];
-    if (!parsed.workoutCategories.includes(parsed.workoutDayFilter)) {
-      parsed.workoutDayFilter = primaryCat;
-    }
     if (!parsed.settings) {
       parsed.settings = { theme: 'auto', restTimerEnabled: true, restSeconds: 90 };
     }
     if (!parsed.profiles[parsed.activeUser]) {
       parsed.activeUser = 'mark';
+    }
+    if (TG?.isAthlete?.()) {
+      parsed.activeUser = 'lera';
     }
     (parsed.exercises || []).forEach((ex) => {
       const match = DB?.EXERCISES_LIBRARY.find((l) => (ex.key && l.key === ex.key) || l.name === ex.name) || DB?.findLibraryMatch(ex.name);
@@ -665,7 +665,7 @@
         if (!ex.kind && match.kind) ex.kind = match.kind;
         if (!ex.metric && match.metric) ex.metric = match.metric;
       }
-      if (!parsed.workoutCategories.includes(ex.day)) ex.day = primaryCat;
+      if (!ex.day) ex.day = primaryCat;
     });
     ['mark', 'lera'].forEach((uid) => {
       const prof = parsed.profiles[uid];
@@ -675,9 +675,13 @@
       if (!prof.activeSchemeId) {
         prof.activeSchemeId = uid === 'lera' ? 'lera-slim-glutes' : 'mark-mass';
       }
+      if (!Array.isArray(prof.days) || prof.days.length === 0) {
+        prof.days = [...parsed.workoutCategories];
+      }
+      const profPrimary = prof.days[0];
       if (!prof.items) prof.items = {};
       Object.entries(prof.items).forEach(([exId, it]) => {
-        if (!parsed.workoutCategories.includes(it.day)) it.day = primaryCat;
+        if (!prof.days.includes(it.day)) it.day = profPrimary;
         const exObj = (parsed.exercises || []).find((e) => e.id === exId);
         if (exObj) {
           const metric = DB ? DB.getExerciseMetric(exObj) : (exObj.metric || 'weight');
@@ -687,6 +691,10 @@
         }
       });
     });
+    const activeDays = parsed.profiles[parsed.activeUser].days || parsed.workoutCategories;
+    if (!activeDays.includes(parsed.workoutDayFilter)) {
+      parsed.workoutDayFilter = activeDays[0];
+    }
     return parsed;
   }
 
@@ -704,19 +712,22 @@
           const sc = getSchemeById(preferred, fresh.profiles[preferred].activeSchemeId);
           if (sc) fresh.settings.restSeconds = sc.restSeconds;
         }
-        return fresh;
+        return normalizeState(fresh);
       }
       return normalizeState(JSON.parse(raw));
     } catch {
-      return createDefaultData();
+      return normalizeState(createDefaultData());
     }
   }
 
   function saveState(options = {}) {
-    const { sync = true, touchUser = state.activeUser } = options;
+    const { sync = true, touchUser = state.activeUser, scope = null } = options;
     const nowIso = new Date().toISOString();
     state.updatedAt = nowIso;
-    if (touchUser && state.profiles?.[touchUser]) {
+    if (touchUser === 'all') {
+      if (state.profiles?.mark) state.profiles.mark.updatedAt = nowIso;
+      if (state.profiles?.lera) state.profiles.lera.updatedAt = nowIso;
+    } else if (touchUser && state.profiles?.[touchUser]) {
       state.profiles[touchUser].updatedAt = nowIso;
     }
     try {
@@ -725,7 +736,8 @@
       // Ignore storage quota issues silently
     }
     if (sync && TG) {
-      TG.schedulePush(() => state);
+      const pushScope = scope || (touchUser === 'all' ? 'all' : (touchUser || state.activeUser));
+      TG.schedulePush(() => state, pushScope);
     }
   }
 
@@ -807,8 +819,15 @@
     return state.profiles[state.activeUser];
   }
 
-  function getDefaultCategory() {
-    return (state.workoutCategories && state.workoutCategories[0]) || 'День 1';
+  function getProfileDays(userId = state.activeUser) {
+    const prof = state.profiles?.[userId];
+    if (prof && Array.isArray(prof.days) && prof.days.length) return prof.days;
+    return state.workoutCategories || ['День 1', 'День 2', 'День 3'];
+  }
+
+  function getDefaultCategory(userId = state.activeUser) {
+    const days = getProfileDays(userId);
+    return days[0] || 'День 1';
   }
 
   function ensureUserItem(userId, exId, defaults = {}) {
@@ -1071,10 +1090,23 @@
     `;
   }
 
+  function renderCoachBanner() {
+    if (!TG?.isCoach?.() || state.activeUser !== 'lera') return '';
+    return `
+      <div class="coach-mode-bar">
+        <div class="coach-mode-left">
+          <span class="profile-dot lera"></span>
+          <span>Режим тренера: <strong>Лера</strong></span>
+        </div>
+        <button type="button" class="coach-back-btn" data-user-btn="mark">← К Марку</button>
+      </div>
+    `;
+  }
+
   /* ---- Screen 1: Workout ---- */
   function renderWorkoutScreen() {
     const profile = getActiveProfile();
-    const cats = state.workoutCategories || ['День 1', 'День 2', 'День 3'];
+    const cats = getProfileDays(state.activeUser);
     const activeDay = cats.includes(state.workoutDayFilter) ? state.workoutDayFilter : cats[0];
     state.workoutDayFilter = activeDay;
 
@@ -1083,6 +1115,7 @@
     const doneSets = filtered.reduce((sum, { item }) => sum + item.sets.filter((s) => s.done).length, 0);
 
     return `
+      ${renderCoachBanner()}
       <div class="workout-top-row">
         <div class="day-switcher" role="tablist" aria-label="Дни тренировок">
           ${cats.map((d) => `
@@ -1811,7 +1844,7 @@
           <div style="font-size:12px;color:var(--text-secondary);">Укажите данные, чтобы подобрать идеальную схему прогрессии</div>
         </div>
         ${required
-          ? `<button type="button" class="rule-bar-link" data-action="switch-user-in-onboarding" data-target-user="${otherUser}">Это ${otherLabel} ›</button>`
+          ? (TG?.isAthlete?.() ? '' : `<button type="button" class="rule-bar-link" data-action="switch-user-in-onboarding" data-target-user="${otherUser}">Это ${otherLabel} ›</button>`)
           : `<button type="button" class="sheet-close" data-action="close-sheet" aria-label="Закрыть">✕</button>`
         }
       </div>
@@ -2033,8 +2066,9 @@
   }
 
   function openConfirmAddForm(libItem = null) {
-    const defaultTarget = state.activeUser;
-    const cats = state.workoutCategories || ['День 1', 'День 2', 'День 3'];
+    const isAthlete = Boolean(TG?.isAthlete?.());
+    const defaultTarget = isAthlete ? 'lera' : state.activeUser;
+    const cats = getProfileDays(defaultTarget);
     const initialName = libItem ? libItem.name : (addSheetSearch.trim() || '');
     const initialEq = libItem ? libItem.equipment : (addSheetMuscle === 'Кардио' ? 'Кардио' : 'Тренажёр');
     const initialMuscle = libItem ? libItem.muscle : (addSheetMuscle !== 'Все' ? addSheetMuscle : 'Грудь');
@@ -2137,15 +2171,17 @@
         </div>
 
         <div class="form-section" style="display:flex;flex-direction:column;gap:10px;">
-          <span class="field-label" style="margin-bottom:0;">Кому добавить в план тренировок?</span>
           <input type="hidden" id="add-target" value="${defaultTarget}" />
           <input type="hidden" id="add-default-markw" value="${markW}" />
           <input type="hidden" id="add-default-leraw" value="${leraW}" />
-          <div class="ios-segment" id="add-target-segment">
-            <button type="button" class="ios-segment-btn ${defaultTarget === 'mark' ? 'active' : ''}" data-action="set-add-target" data-target="mark">Марку</button>
-            <button type="button" class="ios-segment-btn ${defaultTarget === 'lera' ? 'active' : ''}" data-action="set-add-target" data-target="lera">Лере</button>
-            <button type="button" class="ios-segment-btn" data-action="set-add-target" data-target="both">Обоим</button>
-          </div>
+          ${!isAthlete ? `
+            <span class="field-label" style="margin-bottom:0;">Кому добавить в план тренировок?</span>
+            <div class="ios-segment" id="add-target-segment">
+              <button type="button" class="ios-segment-btn ${defaultTarget === 'mark' ? 'active' : ''}" data-action="set-add-target" data-target="mark">Марку</button>
+              <button type="button" class="ios-segment-btn ${defaultTarget === 'lera' ? 'active' : ''}" data-action="set-add-target" data-target="lera">Лере</button>
+              <button type="button" class="ios-segment-btn" data-action="set-add-target" data-target="both">Обоим</button>
+            </div>
+          ` : ''}
 
           <div id="add-weights-area">
             ${renderAddWeightsInputs(defaultTarget, markW, leraW, initialMetric, initialKind)}
@@ -2292,7 +2328,7 @@
     if (!ex) return;
     const item = ensureUserItem(state.activeUser, exId);
     const profile = getActiveProfile();
-    const cats = state.workoutCategories || ['День 1', 'День 2', 'День 3'];
+    const cats = getProfileDays(state.activeUser);
     const metric = getExMetric(ex);
     const weightLabel = metric === 'cardio' ? 'Уровень / скорость' : 'Рабочий вес (кг)';
 
@@ -2462,12 +2498,20 @@
       ? new Date(st.lastSyncAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
       : 'ещё не было';
     const appUrl = 'https://bexaf3163.github.io/Gym-Training-/';
+    const roleTag = st.mode === 'shared'
+      ? (st.role === 'coach' ? 'Тренер' : 'С тренером')
+      : (inTg ? 'Личное' : 'Локально');
+    const subHeader = st.mode === 'shared'
+      ? (st.role === 'coach'
+        ? 'Общее облако: ваши правки для Марка и Леры сразу видны у обоих'
+        : 'Общее облако: правки тренера подтягиваются автоматически')
+      : 'Облачная синхронизация через Telegram';
 
     openSheet(`
       <div class="sheet-header">
         <div>
-          <h2 class="sheet-title">Облако Telegram</h2>
-          <div style="font-size:12px;color:var(--text-secondary);">У каждого свой личный аккаунт — без токенов и паролей</div>
+          <h2 class="sheet-title">Облако GymNote</h2>
+          <div style="font-size:12px;color:var(--text-secondary);">${escapeHtml(subHeader)}</div>
         </div>
         <button type="button" class="sheet-close" data-action="close-sheet" aria-label="Закрыть">✕</button>
       </div>
@@ -2478,24 +2522,26 @@
             <div class="ios-row-title" id="tg-sync-status-label">${escapeHtml(st.message)}</div>
             <div class="ios-row-sub tabular">${inTg ? `${userDisplay ? `${escapeHtml(userDisplay)} • ` : ''}Синхронизация: ${escapeHtml(lastSyncText)}` : 'Откройте через бота Telegram для облачного хранения'}</div>
           </div>
-          <span class="tag ${inTg ? 'success' : 'accent'}">${inTg ? 'Telegram' : 'Локально'}</span>
+          <span class="tag ${st.mode === 'shared' ? 'success' : (inTg ? 'accent' : '')}">${escapeHtml(roleTag)}</span>
         </div>
+
+        ${st.setupHint ? `
+          <div class="rec-banner" style="margin-bottom:0;font-size:12.5px;">
+            <strong>Общее тренерское облако:</strong> ${escapeHtml(st.setupHint)}
+          </div>
+        ` : ''}
 
         ${inTg ? `
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <button type="button" class="btn-secondary-full" data-action="tg-pull">↓ Загрузить</button>
+            <button type="button" class="btn-secondary-full" data-action="tg-pull">↓ Обновить</button>
             <button type="button" class="btn-secondary-full" data-action="tg-push">↑ Сохранить</button>
           </div>
           <button type="button" class="btn-primary-full" data-action="tg-sync-now">Синхронизировать сейчас</button>
         ` : `
           <div class="rec-banner" style="margin-bottom:0;font-size:12.5px;">
-            <strong>Как подключить Telegram за 1 минуту:</strong><br/>
-            1. Откройте <strong>@BotFather</strong> в Telegram → <code>/newbot</code> (придумайте имя, например <em>GymNote</em>).<br/>
-            2. Отправьте <code>/mybots</code> → выберите бота → <strong>Bot Settings → Menu Button → Configure menu button</strong>.<br/>
-            3. Вставьте ссылку ниже и название кнопки (например, <em>Тренировка</em>).<br/>
-            4. Откройте бота у себя и отправьте Лере — у каждого автоматически будет своё облако Telegram!
+            Откройте приложение через бота <strong>@GymNote2_bot</strong> в Telegram, чтобы включить автоматическое облако.
           </div>
-          <button type="button" class="btn-primary-full" data-action="tg-copy-url" data-url="${appUrl}">Скопировать ссылку для @BotFather</button>
+          <button type="button" class="btn-primary-full" data-action="tg-copy-url" data-url="${appUrl}">Скопировать ссылку</button>
         `}
       </div>
 
@@ -2507,11 +2553,13 @@
   }
 
   function openSettingsSheet() {
-    const cats = state.workoutCategories || ['День 1', 'День 2', 'День 3'];
+    const cats = getProfileDays(state.activeUser);
     const profile = getActiveProfile();
     const actShort = ACTIVITY_LEVELS.find((a) => a.id === profile.body?.activity)?.short || 'не указана';
     const inTg = TG ? TG.isInTelegram() : false;
     const syncSt = TG ? TG.getStatus() : null;
+    const isCoach = Boolean(TG?.isCoach?.());
+    const isAthlete = Boolean(TG?.isAthlete?.());
 
     openSheet(`
       <div class="sheet-header">
@@ -2519,24 +2567,38 @@
         <button type="button" class="sheet-close" data-action="close-sheet">✕</button>
       </div>
 
-      <div class="form-section" style="display:flex;flex-direction:column;gap:8px;">
-        <span class="field-label" style="margin-bottom:0;">Активный профиль</span>
-        <div class="profile-switch" id="profile-switch" data-active="${escapeHtml(state.activeUser)}" style="width:100%;" role="tablist" aria-label="Выбор профиля">
-          <div class="profile-switch-thumb" aria-hidden="true"></div>
-          <button type="button" class="profile-btn ${state.activeUser === 'mark' ? 'active' : ''}" id="btn-user-mark" data-user-btn="mark" role="tab" aria-selected="${state.activeUser === 'mark'}">
-            <span class="profile-dot mark"></span>
-            <span>Марк</span>
-          </button>
-          <button type="button" class="profile-btn ${state.activeUser === 'lera' ? 'active' : ''}" id="btn-user-lera" data-user-btn="lera" role="tab" aria-selected="${state.activeUser === 'lera'}">
-            <span class="profile-dot lera"></span>
-            <span>Лера</span>
-          </button>
+      ${!isAthlete ? `
+        <div class="form-section" style="display:flex;flex-direction:column;gap:8px;">
+          <span class="field-label" style="margin-bottom:0;">${isCoach ? 'Режим тренера — кого редактируем' : 'Активный профиль'}</span>
+          <div class="profile-switch" id="profile-switch" data-active="${escapeHtml(state.activeUser)}" style="width:100%;" role="tablist" aria-label="Выбор профиля">
+            <div class="profile-switch-thumb" aria-hidden="true"></div>
+            <button type="button" class="profile-btn ${state.activeUser === 'mark' ? 'active' : ''}" id="btn-user-mark" data-user-btn="mark" role="tab" aria-selected="${state.activeUser === 'mark'}">
+              <span class="profile-dot mark"></span>
+              <span>Марк</span>
+            </button>
+            <button type="button" class="profile-btn ${state.activeUser === 'lera' ? 'active' : ''}" id="btn-user-lera" data-user-btn="lera" role="tab" aria-selected="${state.activeUser === 'lera'}">
+              <span class="profile-dot lera"></span>
+              <span>Лера</span>
+            </button>
+          </div>
+          ${isCoach ? `<div style="font-size:12px;color:var(--text-secondary);">Все правки в профиле «Лера» автоматически появятся у неё в Telegram.</div>` : ''}
         </div>
-      </div>
+      ` : `
+        <div class="form-section" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="profile-dot lera" style="width:10px;height:10px;"></span>
+            <div>
+              <div class="ios-row-title">Лера</div>
+              <div class="ios-row-sub">Общая программа с тренером</div>
+            </div>
+          </div>
+          <span class="tag success">Онлайн</span>
+        </div>
+      `}
 
       <div class="form-section" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <div>
-          <div class="ios-row-title">Облако Telegram</div>
+          <div class="ios-row-title">${syncSt?.mode === 'shared' ? 'Общее облако' : 'Облако Telegram'}</div>
           <div class="ios-row-sub">${inTg ? escapeHtml(syncSt?.message || 'Авто-синхронизация активна') : 'Откройте через бота Telegram для облака'}</div>
         </div>
         <button type="button" class="rule-bar-link" data-action="open-cloud-sync">Открыть ›</button>
@@ -2544,7 +2606,7 @@
 
       <div class="form-section" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
         <div>
-          <div class="ios-row-title">Мои параметры (${escapeHtml(profile.name)})</div>
+          <div class="ios-row-title">Параметры (${escapeHtml(profile.name)})</div>
           <div class="ios-row-sub tabular">${profile.body?.completed ? `${profile.body.weightKg} кг • ${profile.body.heightCm} см • ${escapeHtml(actShort)}` : 'Не заполнены'}</div>
         </div>
         <button type="button" class="rule-bar-link" data-action="open-body-profile">Изменить ›</button>
@@ -2560,9 +2622,9 @@
       </div>
 
       <div class="form-section" style="display:flex;flex-direction:column;gap:10px;">
-        <span class="field-label" style="margin-bottom:0;">Дни тренировок</span>
+        <span class="field-label" style="margin-bottom:0;">Дни тренировок (${escapeHtml(profile.name)})</span>
         <p style="margin:0;font-size:12px;color:var(--text-secondary);">
-          Можно добавить День 4, 5 или назвать дни по-своему (например: «Ноги», «Верх», «Кардио»).
+          У каждого профиля свой список дней — можно добавить День 4, 5 или назвать по-своему.
         </p>
         <div class="cat-chip-list">
           ${cats.map((c) => `
@@ -2630,9 +2692,9 @@
     if (state.activeTab === 'workout') {
       main.innerHTML = renderWorkoutScreen();
     } else if (state.activeTab === 'progression') {
-      main.innerHTML = renderProgressionScreen();
+      main.innerHTML = renderCoachBanner() + renderProgressionScreen();
     } else {
-      main.innerHTML = renderCatalogScreen();
+      main.innerHTML = renderCoachBanner() + renderCatalogScreen();
       const searchInput = document.getElementById('catalog-search-input');
       if (searchInput) {
         searchInput.addEventListener('input', (e) => {
@@ -2648,18 +2710,23 @@
   document.addEventListener('click', (e) => {
     const userBtn = e.target.closest('[data-user-btn]');
     if (userBtn) {
+      if (TG?.isAthlete?.()) return;
       const nextUser = userBtn.getAttribute('data-user-btn');
       if (nextUser && nextUser !== state.activeUser) {
         state.activeUser = nextUser;
         const prof = state.profiles[nextUser];
+        const nextDays = getProfileDays(nextUser);
+        if (!nextDays.includes(state.workoutDayFilter)) {
+          state.workoutDayFilter = nextDays[0];
+        }
         if (prof.activeSchemeId) {
           const sc = getSchemeById(nextUser, prof.activeSchemeId);
           if (sc) state.settings.restSeconds = sc.restSeconds;
         }
-        saveState();
+        saveState({ sync: false, touchUser: null });
         closeSheet(true);
         render();
-        showToast(`Профиль: ${prof.name}`);
+        showToast(TG?.isCoach?.() && nextUser === 'lera' ? 'Режим тренера: Лера' : `Профиль: ${prof.name}`);
         checkOnboardingRequired();
       }
       return;
@@ -2954,30 +3021,31 @@
 
       case 'set-day-filter':
         state.workoutDayFilter = actionEl.getAttribute('data-day');
-        saveState();
+        saveState({ sync: false, touchUser: null });
         render();
         break;
 
       case 'delete-category': {
         const cat = actionEl.getAttribute('data-cat');
-        if (state.workoutCategories.length <= 1) break;
-        state.workoutCategories = state.workoutCategories.filter((c) => c !== cat);
-        const fallback = state.workoutCategories[0];
+        const profile = getActiveProfile();
+        const curDays = getProfileDays(state.activeUser);
+        if (curDays.length <= 1) break;
+        profile.days = curDays.filter((c) => c !== cat);
+        const fallback = profile.days[0];
         if (state.workoutDayFilter === cat) state.workoutDayFilter = fallback;
-        state.exercises.forEach((ex) => { if (ex.day === cat) ex.day = fallback; });
-        ['mark', 'lera'].forEach((uid) => {
-          Object.values(state.profiles[uid].items).forEach((it) => { if (it.day === cat) it.day = fallback; });
+        Object.values(profile.items || {}).forEach((it) => {
+          if (it.day === cat) it.day = fallback;
         });
         saveState();
         openSettingsSheet();
         render();
-        showToast(`День «${cat}» удалён`);
+        showToast(`День «${cat}» удалён (${profile.name})`);
         break;
       }
 
       case 'set-catalog-filter':
         state.catalogFilter = actionEl.getAttribute('data-filter');
-        saveState();
+        saveState({ sync: false, touchUser: null });
         render();
         break;
 
@@ -3446,12 +3514,14 @@
       const inp = document.getElementById('input-new-category');
       const val = (inp?.value || '').trim();
       if (!val) return;
-      if (!state.workoutCategories.includes(val)) {
-        state.workoutCategories.push(val);
+      const profile = getActiveProfile();
+      const curDays = getProfileDays(state.activeUser);
+      if (!curDays.includes(val)) {
+        profile.days = [...curDays, val];
         saveState();
         openSettingsSheet();
         render();
-        showToast(`День «${val}» добавлен`);
+        showToast(`День «${val}» добавлен (${profile.name})`);
       } else {
         showToast('Такой день уже есть');
       }
@@ -3472,7 +3542,7 @@
       const metric = document.getElementById('add-lib-metric')?.value || (kind === 'cardio' ? 'cardio' : 'weight');
       const day = document.getElementById('add-day')?.value || getDefaultCategory();
       const step = Math.max(0.5, parseFloat(document.getElementById('add-step').value) || 2.5);
-      const target = document.getElementById('add-target').value;
+      const target = TG?.isAthlete?.() ? 'lera' : document.getElementById('add-target').value;
       const setupNote = document.getElementById('add-setup').value.trim();
 
       const existing = state.exercises.find((ex) =>
@@ -3496,9 +3566,11 @@
       };
       const applyToUser = (uid, w, customStep) => {
         const smart = getSmartRuleForExercise(uid, exMeta);
-        const item = ensureUserItem(uid, id, { inPlan: true, day, weight: w, step: customStep ?? smart.step, setupNote, ...smart });
+        const userDays = getProfileDays(uid);
+        const userDay = userDays.includes(day) ? day : userDays[0];
+        const item = ensureUserItem(uid, id, { inPlan: true, day: userDay, weight: w, step: customStep ?? smart.step, setupNote, ...smart });
         item.inPlan = true;
-        item.day = day;
+        item.day = userDay;
         item.weight = w;
         item.step = customStep ?? smart.step;
         item.minReps = smart.minReps;
@@ -3523,7 +3595,8 @@
       state.progressionExerciseId = id;
       catalogSearch = '';
       addSheetSearch = '';
-      saveState();
+      const syncTarget = target === 'both' ? 'all' : target;
+      saveState({ touchUser: syncTarget, scope: syncTarget });
       closeSheet(true);
       render();
       showToast(target === 'both' ? 'Добавлено Марку и Лере!' : `Добавлено: ${name}`);
@@ -3721,10 +3794,30 @@
     TG.pull(state).then((res) => {
       if (res.exists && res.merged) {
         state = normalizeState(res.merged);
+        if (res.role === 'athlete') {
+          state.activeUser = 'lera';
+        }
+        saveState({ sync: false, touchUser: null });
+        render();
+      } else if (res.role === 'athlete') {
+        state.activeUser = 'lera';
         saveState({ sync: false, touchUser: null });
         render();
       }
       checkOnboardingRequired();
+      TG.startLiveRefresh(
+        () => state,
+        (liveRes) => {
+          state = normalizeState(liveRes.merged);
+          saveState({ sync: false, touchUser: null });
+          render();
+          if (liveRes.coachUpdatedLera) {
+            showToast('Тренер обновил программу ✨');
+          } else if (liveRes.leraUpdatedSelf && state.activeUser === 'lera') {
+            showToast('Лера обновила тренировку');
+          }
+        }
+      );
     }).catch(() => {
       checkOnboardingRequired();
     });

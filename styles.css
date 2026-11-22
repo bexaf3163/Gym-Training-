@@ -328,6 +328,40 @@ button:active {
   padding-top: 10px;
 }
 
+/* Coach Mode Banner (only shown when Coach edits Lera) */
+.coach-mode-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px 7px 12px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  border: 0.5px solid rgba(255, 55, 95, 0.28);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.coach-mode-left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.coach-back-btn {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
 /* Section Headers */
 .screen-header {
   display: flex;
