@@ -11,7 +11,7 @@
 
   const EQUIPMENT_TYPES = ['Тренажёр', 'Блок', 'Гантели', 'Штанга', 'Свой вес', 'Кардио'];
   const MUSCLE_GROUPS = ['Грудь', 'Спина', 'Ноги', 'Ягодицы', 'Плечи', 'Руки', 'Кор', 'Кардио'];
-  const STEP_PRESETS = [1, 1.25, 2, 2.5, 5];
+  const STEP_PRESETS = [2.5, 5];
 
   const ACTIVITY_LEVELS = [
     {
@@ -294,7 +294,7 @@
     const rec = profile ? computeRecommendation(userId, profile.body) : null;
     const mult = rec ? rec.startWeightMultiplier : 1;
     const raw = base * mult;
-    const step = libItem.step || 2.5;
+    const step = getMachineStep(libItem);
     return Math.max(step, Math.round(raw / step) * step);
   }
 
@@ -333,49 +333,49 @@
             'ex-1': {
               inPlan: true,
               day: 'День 1',
+              order: 0,
               setupNote: '',
               weight: 65,
-              step: 2.5,
+              step: 5,
               ruleType: 'double',
               minReps: 8,
               maxReps: 12,
               sets: [
-                { reps: 12, done: true, weight: 62.5 },
-                { reps: 12, done: true, weight: 65 },
-                { reps: 11, done: false }
+                { reps: 10, done: false },
+                { reps: 10, done: false },
+                { reps: 10, done: false }
               ],
               history: [
-                { date: '2026-10-14', weight: 57.5, reps: 10 },
-                { date: '2026-10-21', weight: 60, reps: 10 },
+                { date: '2026-10-14', weight: 55, reps: 10 },
                 { date: '2026-10-28', weight: 60, reps: 12 },
-                { date: '2026-11-04', weight: 62.5, reps: 11 },
                 { date: '2026-11-12', weight: 65, reps: 10 }
               ]
             },
             'ex-2': {
               inPlan: true,
               day: 'День 1',
+              order: 1,
               setupNote: '',
               weight: 60,
-              step: 2.5,
+              step: 5,
               ruleType: 'double',
               minReps: 8,
               maxReps: 12,
               sets: [
-                { reps: 12, done: true, weight: 60 },
-                { reps: 12, done: true, weight: 60 },
-                { reps: 12, done: true, weight: 60 }
+                { reps: 10, done: false },
+                { reps: 10, done: false },
+                { reps: 10, done: false }
               ],
               history: [
-                { date: '2026-10-14', weight: 52.5, reps: 10 },
-                { date: '2026-10-24', weight: 55, reps: 11 },
-                { date: '2026-11-05', weight: 57.5, reps: 12 },
+                { date: '2026-10-14', weight: 50, reps: 10 },
+                { date: '2026-10-28', weight: 55, reps: 12 },
                 { date: '2026-11-14', weight: 60, reps: 10 }
               ]
             },
             'ex-3': {
               inPlan: true,
               day: 'День 1',
+              order: 2,
               setupNote: '',
               weight: 140,
               step: 5,
@@ -397,8 +397,9 @@
             'ex-4': {
               inPlan: true,
               day: 'День 2',
+              order: 0,
               setupNote: '',
-              weight: 24,
+              weight: 22.5,
               step: 2.5,
               ruleType: 'double',
               minReps: 8,
@@ -409,17 +410,18 @@
                 { reps: 8, done: false }
               ],
               history: [
-                { date: '2026-10-18', weight: 20, reps: 10 },
-                { date: '2026-11-01', weight: 22, reps: 11 },
-                { date: '2026-11-12', weight: 24, reps: 9 }
+                { date: '2026-10-18', weight: 17.5, reps: 10 },
+                { date: '2026-11-01', weight: 20, reps: 11 },
+                { date: '2026-11-12', weight: 22.5, reps: 9 }
               ]
             },
             'ex-6': {
               inPlan: true,
               day: 'День 2',
+              order: 1,
               setupNote: '',
               weight: 55,
-              step: 2.5,
+              step: 5,
               ruleType: 'double',
               minReps: 8,
               maxReps: 12,
@@ -433,6 +435,7 @@
             'ex-8': {
               inPlan: true,
               day: 'День 2',
+              order: 2,
               setupNote: '',
               weight: 60,
               step: 5,
@@ -449,6 +452,7 @@
             'ex-7': {
               inPlan: true,
               day: 'День 3',
+              order: 0,
               setupNote: '',
               weight: 50,
               step: 2.5,
@@ -465,6 +469,7 @@
             'ex-10': {
               inPlan: true,
               day: 'День 3',
+              order: 1,
               setupNote: '',
               weight: 45,
               step: 2.5,
@@ -488,6 +493,7 @@
             'ex-5': {
               inPlan: true,
               day: 'День 1',
+              order: 0,
               setupNote: '',
               weight: 60,
               step: 5,
@@ -495,9 +501,9 @@
               minReps: 12,
               maxReps: 15,
               sets: [
-                { reps: 15, done: true, weight: 55 },
-                { reps: 15, done: true, weight: 60 },
-                { reps: 15, done: true, weight: 60 }
+                { reps: 12, done: false },
+                { reps: 12, done: false },
+                { reps: 12, done: false }
               ],
               history: [
                 { date: '2026-10-14', weight: 45, reps: 12 },
@@ -509,6 +515,7 @@
             'ex-3': {
               inPlan: true,
               day: 'День 1',
+              order: 1,
               setupNote: '',
               weight: 70,
               step: 5,
@@ -516,8 +523,8 @@
               minReps: 12,
               maxReps: 15,
               sets: [
-                { reps: 13, done: true, weight: 70 },
-                { reps: 13, done: false },
+                { reps: 12, done: false },
+                { reps: 12, done: false },
                 { reps: 12, done: false }
               ],
               history: [
@@ -530,29 +537,30 @@
             'ex-2': {
               inPlan: true,
               day: 'День 1',
+              order: 2,
               setupNote: '',
               weight: 30,
-              step: 2.5,
+              step: 5,
               ruleType: 'double',
               minReps: 12,
               maxReps: 16,
               sets: [
-                { reps: 13, done: false },
-                { reps: 13, done: false },
+                { reps: 12, done: false },
+                { reps: 12, done: false },
                 { reps: 12, done: false }
               ],
               history: [
                 { date: '2026-10-15', weight: 25, reps: 12 },
-                { date: '2026-10-29', weight: 27.5, reps: 15 },
                 { date: '2026-11-13', weight: 30, reps: 13 }
               ]
             },
             'ex-9': {
               inPlan: true,
               day: 'День 2',
+              order: 0,
               setupNote: '',
               weight: 45,
-              step: 2.5,
+              step: 5,
               ruleType: 'double',
               minReps: 14,
               maxReps: 18,
@@ -566,9 +574,10 @@
             'ex-6': {
               inPlan: true,
               day: 'День 2',
+              order: 1,
               setupNote: '',
-              weight: 27.5,
-              step: 2.5,
+              weight: 25,
+              step: 5,
               ruleType: 'double',
               minReps: 12,
               maxReps: 16,
@@ -578,17 +587,17 @@
                 { reps: 12, done: false }
               ],
               history: [
-                { date: '2026-10-20', weight: 22.5, reps: 12 },
-                { date: '2026-11-03', weight: 25, reps: 15 },
-                { date: '2026-11-15', weight: 27.5, reps: 12 }
+                { date: '2026-10-20', weight: 20, reps: 12 },
+                { date: '2026-11-15', weight: 25, reps: 12 }
               ]
             },
             'ex-8': {
               inPlan: true,
               day: 'День 3',
+              order: 0,
               setupNote: '',
               weight: 35,
-              step: 2.5,
+              step: 5,
               ruleType: 'double',
               minReps: 14,
               maxReps: 18,
@@ -602,9 +611,10 @@
             'ex-1': {
               inPlan: true,
               day: 'День 3',
+              order: 1,
               setupNote: '',
-              weight: 22.5,
-              step: 2.5,
+              weight: 20,
+              step: 5,
               ruleType: 'double',
               minReps: 12,
               maxReps: 16,
@@ -613,7 +623,7 @@
                 { reps: 12, done: false },
                 { reps: 12, done: false }
               ],
-              history: [{ date: '2026-11-08', weight: 22.5, reps: 12 }]
+              history: [{ date: '2026-11-08', weight: 20, reps: 12 }]
             }
           }
         }
@@ -629,6 +639,57 @@
   let toastTimeout = null;
   let sheetLocked = false;
 
+  function normalizeState(parsed) {
+    if (!parsed || !parsed.profiles || !parsed.profiles.mark || !parsed.profiles.lera) {
+      return createDefaultData();
+    }
+    if (!Array.isArray(parsed.workoutCategories) || parsed.workoutCategories.length === 0 || (parsed.workoutCategories.length === 1 && parsed.workoutCategories[0] === 'Фулбади')) {
+      parsed.workoutCategories = ['День 1', 'День 2', 'День 3'];
+    }
+    const primaryCat = parsed.workoutCategories[0];
+    if (!parsed.workoutCategories.includes(parsed.workoutDayFilter)) {
+      parsed.workoutDayFilter = primaryCat;
+    }
+    if (!parsed.settings) {
+      parsed.settings = { theme: 'auto', restTimerEnabled: true, restSeconds: 90 };
+    }
+    if (!parsed.profiles[parsed.activeUser]) {
+      parsed.activeUser = 'mark';
+    }
+    (parsed.exercises || []).forEach((ex) => {
+      const match = DB?.EXERCISES_LIBRARY.find((l) => (ex.key && l.key === ex.key) || l.name === ex.name) || DB?.findLibraryMatch(ex.name);
+      if (match) {
+        ex.visual = match.visual;
+        if (!ex.en) ex.en = match.en;
+        if (!ex.key) ex.key = match.key;
+        if (!ex.kind && match.kind) ex.kind = match.kind;
+        if (!ex.metric && match.metric) ex.metric = match.metric;
+      }
+      if (!parsed.workoutCategories.includes(ex.day)) ex.day = primaryCat;
+    });
+    ['mark', 'lera'].forEach((uid) => {
+      const prof = parsed.profiles[uid];
+      if (!prof.body) {
+        prof.body = { weightKg: null, heightCm: null, activity: '', completed: false };
+      }
+      if (!prof.activeSchemeId) {
+        prof.activeSchemeId = uid === 'lera' ? 'lera-slim-glutes' : 'mark-mass';
+      }
+      if (!prof.items) prof.items = {};
+      Object.entries(prof.items).forEach(([exId, it]) => {
+        if (!parsed.workoutCategories.includes(it.day)) it.day = primaryCat;
+        const exObj = (parsed.exercises || []).find((e) => e.id === exId);
+        if (exObj) {
+          const metric = DB ? DB.getExerciseMetric(exObj) : (exObj.metric || 'weight');
+          if (metric === 'weight' && it.step !== 2.5 && it.step !== 5) {
+            it.step = getMachineStep(exObj);
+          }
+        }
+      });
+    });
+    return parsed;
+  }
+
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
@@ -638,52 +699,14 @@
       if (!raw) {
         const fresh = createDefaultData();
         const preferred = TG?.detectPreferredProfile?.();
-        if (preferred) fresh.activeUser = preferred;
+        if (preferred) {
+          fresh.activeUser = preferred;
+          const sc = getSchemeById(preferred, fresh.profiles[preferred].activeSchemeId);
+          if (sc) fresh.settings.restSeconds = sc.restSeconds;
+        }
         return fresh;
       }
-      const parsed = JSON.parse(raw);
-      if (!parsed || !parsed.profiles || !parsed.profiles.mark || !parsed.profiles.lera) {
-        return createDefaultData();
-      }
-      // Переход со старой единственной категории «Фулбади» на День 1 / День 2 / День 3
-      if (!Array.isArray(parsed.workoutCategories) || parsed.workoutCategories.length === 0 || (parsed.workoutCategories.length === 1 && parsed.workoutCategories[0] === 'Фулбади')) {
-        parsed.workoutCategories = ['День 1', 'День 2', 'День 3'];
-      }
-      const primaryCat = parsed.workoutCategories[0];
-      if (!parsed.workoutCategories.includes(parsed.workoutDayFilter)) {
-        parsed.workoutDayFilter = primaryCat;
-      }
-      (parsed.exercises || []).forEach((ex) => {
-        const match = DB?.EXERCISES_LIBRARY.find((l) => (ex.key && l.key === ex.key) || l.name === ex.name) || DB?.findLibraryMatch(ex.name);
-        if (match) {
-          ex.visual = match.visual;
-          if (!ex.en) ex.en = match.en;
-          if (!ex.key) ex.key = match.key;
-          if (!ex.kind && match.kind) ex.kind = match.kind;
-          if (!ex.metric && match.metric) ex.metric = match.metric;
-        }
-        if (!parsed.workoutCategories.includes(ex.day)) ex.day = primaryCat;
-      });
-      ['mark', 'lera'].forEach((uid) => {
-        const prof = parsed.profiles[uid];
-        if (!prof.body) {
-          prof.body = { weightKg: null, heightCm: null, activity: '', completed: false };
-        }
-        if (!prof.activeSchemeId) {
-          prof.activeSchemeId = uid === 'lera' ? 'lera-slim-glutes' : 'mark-mass';
-        }
-        Object.entries(prof.items || {}).forEach(([exId, it]) => {
-          if (!parsed.workoutCategories.includes(it.day)) it.day = primaryCat;
-          const exObj = (parsed.exercises || []).find((e) => e.id === exId);
-          if (exObj) {
-            const metric = DB ? DB.getExerciseMetric(exObj) : (exObj.metric || 'weight');
-            if (metric === 'weight' && it.step !== 2.5 && it.step !== 5) {
-              it.step = getMachineStep(exObj);
-            }
-          }
-        });
-      });
-      return parsed;
+      return normalizeState(JSON.parse(raw));
     } catch {
       return createDefaultData();
     }
@@ -1482,9 +1505,9 @@
               <div class="ios-row-sub">${exMetric === 'cardio' ? 'На сколько повышать уровень' : (exMetric === 'time' ? 'На сколько увеличивать цель' : 'На сколько увеличивать вес')}</div>
             </div>
             <div class="reps-control tabular">
-              <button type="button" class="mini-btn" data-action="rule-step-delta" data-ex-id="${selectedEx.id}" data-delta="${exMetric === 'time' ? -5 : -0.5}">−</button>
+              <button type="button" class="mini-btn" data-action="rule-step-delta" data-ex-id="${selectedEx.id}" data-delta="${exMetric === 'time' ? -5 : (exMetric === 'cardio' ? -0.5 : -2.5)}">−</button>
               <span style="min-width:56px;text-align:center;font-weight:700;">+${formatWeight(item.step)} ${stepUnit}</span>
-              <button type="button" class="mini-btn" data-action="rule-step-delta" data-ex-id="${selectedEx.id}" data-delta="${exMetric === 'time' ? 5 : 0.5}">+</button>
+              <button type="button" class="mini-btn" data-action="rule-step-delta" data-ex-id="${selectedEx.id}" data-delta="${exMetric === 'time' ? 5 : (exMetric === 'cardio' ? 0.5 : 2.5)}">+</button>
             </div>
           </div>
           <div class="chip-row">
@@ -1553,17 +1576,73 @@
     `;
   }
 
-  /* ---- Screen 3: Catalog (Machines & Exercises) ---- */
+  /* ---- Screen 3: Catalog (Full 97+ Machines, Cardio & Bodyweight Library) ---- */
+  function getUnifiedCatalogEntries() {
+    const profile = getActiveProfile();
+    const entries = [];
+    const seenKeys = new Set();
+    const seenNames = new Set();
+
+    state.exercises.forEach((ex, idx) => {
+      const item = profile.items[ex.id] || null;
+      const inPlan = Boolean(item && item.inPlan);
+      if (ex.key) seenKeys.add(ex.key);
+      seenNames.add(DB ? DB.normalizeText(ex.name) : ex.name.trim().toLowerCase());
+      entries.push({
+        source: 'state',
+        ex,
+        item,
+        inPlan,
+        sortGroup: inPlan ? 0 : 1,
+        sortIdx: typeof item?.order === 'number' ? item.order : idx
+      });
+    });
+
+    if (DB && Array.isArray(DB.EXERCISES_LIBRARY)) {
+      DB.EXERCISES_LIBRARY.forEach((lib, idx) => {
+        const normName = DB.normalizeText(lib.name);
+        if ((lib.key && seenKeys.has(lib.key)) || seenNames.has(normName)) return;
+        seenKeys.add(lib.key);
+        seenNames.add(normName);
+        entries.push({
+          source: 'lib',
+          ex: lib,
+          item: null,
+          inPlan: false,
+          sortGroup: 2,
+          sortIdx: idx
+        });
+      });
+    }
+
+    entries.sort((a, b) => a.sortGroup - b.sortGroup || a.sortIdx - b.sortIdx);
+    return entries;
+  }
+
+  function matchesCatalogFilter(entry, filterId) {
+    const { ex, inPlan } = entry;
+    if (filterId === 'in_plan') return inPlan;
+    if (filterId === 'machine') return ex.equipment === 'Тренажёр';
+    if (filterId === 'cable') return ex.equipment === 'Блок';
+    if (filterId === 'free') return ['Гантели', 'Штанга'].includes(ex.equipment);
+    if (filterId === 'bodyweight') return ex.equipment === 'Свой вес';
+    if (filterId === 'cardio') return ex.equipment === 'Кардио' || ex.muscle === 'Кардио';
+    return true;
+  }
+
   function renderCatalogScreen() {
     const profile = getActiveProfile();
+    const allEntries = getUnifiedCatalogEntries();
+    const countFor = (id) => allEntries.filter((e) => matchesCatalogFilter(e, id)).length;
+
     const filters = [
-      { id: 'all', label: 'Все' },
-      { id: 'in_plan', label: `План (${profile.name})` },
-      { id: 'machine', label: 'Тренажёры' },
-      { id: 'cable', label: 'Блоки' },
-      { id: 'free', label: 'Свободные' },
-      { id: 'bodyweight', label: 'Свой вес' },
-      { id: 'cardio', label: 'Кардио' }
+      { id: 'all', label: `Все (${allEntries.length})` },
+      { id: 'in_plan', label: `План ${profile.name} (${countFor('in_plan')})` },
+      { id: 'machine', label: `Тренажёры (${countFor('machine')})` },
+      { id: 'cable', label: `Блоки (${countFor('cable')})` },
+      { id: 'free', label: `Свободные (${countFor('free')})` },
+      { id: 'bodyweight', label: `Свой вес (${countFor('bodyweight')})` },
+      { id: 'cardio', label: `Кардио (${countFor('cardio')})` }
     ];
 
     return `
@@ -1571,13 +1650,13 @@
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
           <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
         </svg>
-        <input type="search" id="catalog-search-input" class="search-input" placeholder="Поиск: дорожка, планка, бабочка, rdl, твб..." value="${escapeHtml(catalogSearch)}" autocomplete="off" />
+        <input type="search" id="catalog-search-input" class="search-input" placeholder="Поиск: дорожка, лестница, планка, бабочка, rdl..." value="${escapeHtml(catalogSearch)}" autocomplete="off" />
       </div>
 
       <div class="pill-strip">
         ${filters.map((f) => `
           <button type="button" class="filter-pill ${state.catalogFilter === f.id ? 'active' : ''}" data-action="set-catalog-filter" data-filter="${f.id}">
-            ${f.label}
+            ${escapeHtml(f.label)}
           </button>
         `).join('')}
       </div>
@@ -1589,20 +1668,17 @@
   }
 
   function renderCatalogListItems() {
-    const profile = getActiveProfile();
     const normQuery = DB ? DB.normalizeText(catalogSearch) : catalogSearch.trim().toLowerCase();
     const tokens = normQuery ? normQuery.split(' ') : [];
 
-    const list = state.exercises.filter((ex) => {
-      const item = profile.items[ex.id];
-      if (state.catalogFilter === 'in_plan' && (!item || !item.inPlan)) return false;
-      if (state.catalogFilter === 'machine' && ex.equipment !== 'Тренажёр') return false;
-      if (state.catalogFilter === 'cable' && ex.equipment !== 'Блок') return false;
-      if (state.catalogFilter === 'free' && !['Гантели', 'Штанга'].includes(ex.equipment)) return false;
-      if (state.catalogFilter === 'bodyweight' && ex.equipment !== 'Свой вес') return false;
-      if (state.catalogFilter === 'cardio' && ex.equipment !== 'Кардио' && ex.muscle !== 'Кардио') return false;
+    const allEntries = getUnifiedCatalogEntries();
+    const list = allEntries.filter((entry) => {
+      if (!matchesCatalogFilter(entry, state.catalogFilter)) return false;
       if (tokens.length) {
-        const libMatch = DB?.EXERCISES_LIBRARY.find((l) => l.key === ex.key || l.name === ex.name);
+        const { ex, item } = entry;
+        const libMatch = entry.source === 'lib'
+          ? ex
+          : DB?.EXERCISES_LIBRARY.find((l) => l.key === ex.key || l.name === ex.name);
         const rawHay = [ex.name, ex.en || '', ex.equipment, ex.muscle, item?.setupNote || '', libMatch?._search || ''].join(' ');
         const hay = DB ? DB.normalizeText(rawHay) : rawHay.toLowerCase();
         if (!tokens.every((t) => hay.includes(t))) return false;
@@ -1613,23 +1689,23 @@
     if (list.length === 0) {
       return `
         <div class="empty-card">
-          <h2 class="empty-title">В вашей базе пока нет этого тренажёра</h2>
-          <p class="empty-sub">Откройте справочник на ${DB ? DB.EXERCISES_LIBRARY.length : 98} упражнений (тренажёры, кардио, свой вес) — поиск работает на русском, английском и по сокращениям.</p>
-          <button type="button" class="btn-primary-full" data-action="open-add-sheet">+ Найти и добавить</button>
+          <h2 class="empty-title">Ничего не найдено</h2>
+          <p class="empty-sub">Попробуйте другой запрос или добавьте своё упражнение вручную.</p>
+          <button type="button" class="btn-primary-full" data-action="open-add-sheet">+ Создать вручную</button>
         </div>
       `;
     }
 
-    return list.map((ex) => {
-      const item = profile.items[ex.id];
-      const inPlan = Boolean(item && item.inPlan);
-      const otherUser = state.activeUser === 'mark' ? 'lera' : 'mark';
-      const otherInPlan = Boolean(state.profiles[otherUser].items[ex.id]?.inPlan);
-      const otherName = state.profiles[otherUser].name;
+    const otherUser = state.activeUser === 'mark' ? 'lera' : 'mark';
+    const otherName = state.profiles[otherUser].name;
+
+    return list.map((entry) => {
+      const { source, ex, item, inPlan } = entry;
+      const otherInPlan = source === 'state' && Boolean(state.profiles[otherUser].items[ex.id]?.inPlan);
       const metric = getExMetric(ex);
       const kind = getExKind(ex);
 
-      let subText = 'Нажмите, чтобы настроить';
+      let subText = '';
       if (item) {
         if (metric === 'cardio') {
           subText = `ур. ${formatWeight(item.weight)} • ${item.minReps}–${item.maxReps} мин`;
@@ -1638,20 +1714,41 @@
         } else if (item.weight === 0 && (kind === 'bodyweight' || kind === 'core')) {
           subText = `Свой вес • ${item.minReps}–${item.maxReps} повт.`;
         } else {
-          subText = `${formatWeight(item.weight)} кг`;
+          subText = `${formatWeight(item.weight)} кг • ${item.minReps}–${item.maxReps} повт.`;
         }
         if (item.setupNote) subText += ` • ${escapeHtml(item.setupNote)}`;
+      } else {
+        const smart = getSmartRuleForExercise(state.activeUser, ex);
+        const recW = suggestStartWeight(state.activeUser, ex);
+        if (metric === 'cardio') {
+          subText = `Реком.: ур. ${formatWeight(recW)} • ${smart.minReps}–${smart.maxReps} мин`;
+        } else if (metric === 'time') {
+          subText = `Реком.: свой вес • ${smart.sets}×${smart.minReps}–${smart.maxReps} сек`;
+        } else if (recW === 0 && (kind === 'bodyweight' || kind === 'core')) {
+          subText = `Реком.: свой вес • ${smart.sets}×${smart.minReps}–${smart.maxReps} повт.`;
+        } else {
+          subText = `Реком.: ${formatWeight(recW)} кг • ${smart.sets}×${smart.minReps}–${smart.maxReps}`;
+        }
       }
 
       const howTo = DB ? DB.getHowToTip(ex) : '';
+      const thumbAttrs = source === 'state'
+        ? `data-action="open-visual-preview" data-ex-id="${ex.id}"`
+        : `data-action="open-visual-preview-lib" data-lib-key="${escapeHtml(ex.key)}"`;
+      const mainAttrs = source === 'state'
+        ? `data-action="open-edit-sheet" data-ex-id="${ex.id}"`
+        : `data-action="pick-lib-exercise" data-lib-key="${escapeHtml(ex.key)}"`;
+      const btnAttrs = source === 'state'
+        ? `data-action="toggle-in-plan" data-ex-id="${ex.id}"`
+        : `data-action="add-lib-to-plan" data-lib-key="${escapeHtml(ex.key)}"`;
 
       return `
         <div class="catalog-item">
           <div class="catalog-top">
-            <button type="button" class="ex-thumb" data-action="open-visual-preview" data-ex-id="${ex.id}" title="Показать тренажёр">
+            <button type="button" class="ex-thumb" ${thumbAttrs} title="Показать тренажёр">
               ${getVisualForExercise(ex)}
             </button>
-            <div class="catalog-main" data-action="open-edit-sheet" data-ex-id="${ex.id}">
+            <div class="catalog-main" ${mainAttrs}>
               <div class="ex-tags">
                 ${renderUniqueTags([
                   { text: ex.equipment, cls: 'accent' },
@@ -1665,7 +1762,7 @@
               </div>
             </div>
             <div class="catalog-right">
-              <button type="button" class="plan-toggle ${inPlan ? 'in-plan' : ''}" data-action="toggle-in-plan" data-ex-id="${ex.id}">
+              <button type="button" class="plan-toggle ${inPlan ? 'in-plan' : ''}" ${btnAttrs}>
                 ${inPlan ? 'В плане ✓' : '+ В план'}
               </button>
             </div>
@@ -2076,7 +2173,7 @@
     const name = document.getElementById('add-name')?.value || '';
     const metricEl = document.getElementById('add-lib-metric');
     let metric = metricEl?.value || 'weight';
-    if (kind === 'cardio' || equipment === 'Кардио' || muscle === 'Кардио') {
+    if (kind === 'cardio' || equipment === 'Кардио') {
       metric = 'cardio';
     } else if (metric === 'cardio') {
       metric = 'weight';
@@ -2155,9 +2252,12 @@
     `;
   }
 
-  function openVisualPreviewSheet(exId) {
-    const ex = state.exercises.find((e) => e.id === exId);
+  function openVisualPreviewSheet(exId, libKey = null) {
+    const ex = exId
+      ? state.exercises.find((e) => e.id === exId)
+      : DB?.EXERCISES_LIBRARY.find((l) => l.key === libKey);
     if (!ex) return;
+    const isFromState = Boolean(exId && state.exercises.some((e) => e.id === exId));
 
     openSheet(`
       <div class="sheet-header">
@@ -2180,7 +2280,10 @@
         </div>
       </div>
 
-      <button type="button" class="btn-secondary-full" data-action="open-edit-sheet" data-ex-id="${ex.id}">Редактировать параметры</button>
+      ${isFromState
+        ? `<button type="button" class="btn-secondary-full" data-action="open-edit-sheet" data-ex-id="${ex.id}">Редактировать параметры</button>`
+        : `<button type="button" class="btn-primary-full" data-action="pick-lib-exercise" data-lib-key="${escapeHtml(ex.key)}">+ Добавить в тренировку</button>`
+      }
     `);
   }
 
@@ -2243,6 +2346,15 @@
               <input class="field-input tabular" id="edit-weight" type="number" step="0.5" min="0" value="${item.weight}" />
             </div>
           `}
+          ${metric === 'weight' ? `
+            <div>
+              <label class="field-label" for="edit-step">Шаг прибавки веса</label>
+              <select class="field-select" id="edit-step">
+                <option value="2.5" ${item.step === 2.5 ? 'selected' : ''}>2.5 кг</option>
+                <option value="5" ${item.step === 5 ? 'selected' : ''}>5 кг</option>
+              </select>
+            </div>
+          ` : ''}
           <div>
             <label class="field-label" for="edit-setup">Заметка (необязательно)</label>
             <input class="field-input" id="edit-setup" type="text" placeholder="Сиденье, валик, наклон..." value="${escapeHtml(item.setupNote)}" />
@@ -2600,7 +2712,7 @@
         if (!TG) break;
         TG.pull(state).then((res) => {
           if (res.exists && res.merged) {
-            state = res.merged;
+            state = normalizeState(res.merged);
             saveState({ sync: false, touchUser: null });
             render();
             openCloudSyncSheet();
@@ -2632,7 +2744,7 @@
         if (!TG) break;
         TG.syncNow(state).then((res) => {
           if (res.merged) {
-            state = res.merged;
+            state = normalizeState(res.merged);
             saveState({ sync: false, touchUser: null });
             render();
           }
@@ -2690,6 +2802,11 @@
         const nextUser = actionEl.getAttribute('data-target-user');
         if (nextUser && state.profiles[nextUser]) {
           state.activeUser = nextUser;
+          const prof = state.profiles[nextUser];
+          if (prof.activeSchemeId) {
+            const sc = getSchemeById(nextUser, prof.activeSchemeId);
+            if (sc) state.settings.restSeconds = sc.restSeconds;
+          }
           saveState();
           closeSheet(true);
           render();
@@ -2754,6 +2871,47 @@
         break;
       }
 
+      case 'add-lib-to-plan': {
+        const key = actionEl.getAttribute('data-lib-key');
+        const libItem = DB?.EXERCISES_LIBRARY.find((l) => l.key === key);
+        if (!libItem) break;
+        const kind = DB.getExerciseKind(libItem);
+        const metric = DB.getExerciseMetric(libItem);
+        const day = state.workoutDayFilter || getDefaultCategory();
+        let ex = state.exercises.find((e) => (e.key && e.key === libItem.key) || DB.normalizeText(e.name) === DB.normalizeText(libItem.name));
+        if (!ex) {
+          ex = {
+            id: 'ex-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+            key: libItem.key,
+            name: libItem.name,
+            en: libItem.en,
+            equipment: libItem.equipment,
+            muscle: libItem.muscle,
+            kind,
+            metric,
+            day,
+            visual: libItem.visual
+          };
+          state.exercises.push(ex);
+        }
+        const smart = getSmartRuleForExercise(state.activeUser, { ...ex, kind, metric });
+        const startW = suggestStartWeight(state.activeUser, libItem);
+        const item = ensureUserItem(state.activeUser, ex.id, {
+          inPlan: true,
+          day,
+          weight: startW,
+          step: smart.step,
+          ...smart
+        });
+        item.inPlan = true;
+        item.day = day;
+        TG?.haptic('light');
+        saveState();
+        render();
+        showToast(`Добавлено в ${day} (${getActiveProfile().name})`);
+        break;
+      }
+
       case 'open-custom-add-form':
         openConfirmAddForm(null);
         break;
@@ -2761,6 +2919,12 @@
       case 'open-visual-preview':
         openVisualPreviewSheet(exId);
         break;
+
+      case 'open-visual-preview-lib': {
+        const libKey = actionEl.getAttribute('data-lib-key');
+        openVisualPreviewSheet(null, libKey);
+        break;
+      }
 
       case 'open-edit-sheet':
         openEditExerciseSheet(exId);
@@ -3050,9 +3214,12 @@
       }
 
       case 'rule-step-delta': {
+        const ex = state.exercises.find((x) => x.id === exId);
+        const metric = getExMetric(ex);
         const item = ensureUserItem(state.activeUser, exId);
         const delta = parseFloat(actionEl.getAttribute('data-delta'));
-        item.step = Math.max(0.5, Math.round((item.step + delta) * 100) / 100);
+        const minStep = metric === 'time' ? 5 : (metric === 'cardio' ? 0.5 : 2.5);
+        item.step = Math.max(minStep, Math.round((item.step + delta) * 100) / 100);
         saveState();
         render();
         break;
@@ -3099,11 +3266,22 @@
       }
 
       case 'toggle-in-plan': {
-        const item = ensureUserItem(state.activeUser, exId);
+        const ex = state.exercises.find((x) => x.id === exId);
+        const hadItem = Boolean(state.profiles[state.activeUser].items[exId]);
+        const libMatch = ex ? DB?.EXERCISES_LIBRARY.find((l) => (ex.key && l.key === ex.key) || l.name === ex.name) : null;
+        const day = state.workoutDayFilter || getDefaultCategory();
+        const item = ensureUserItem(state.activeUser, exId, {
+          day,
+          weight: libMatch ? suggestStartWeight(state.activeUser, libMatch) : undefined
+        });
         item.inPlan = !item.inPlan;
+        if (item.inPlan && !hadItem) {
+          item.day = day;
+        }
+        TG?.haptic('light');
         saveState();
         render();
-        showToast(item.inPlan ? `Добавлено в план (${getActiveProfile().name})` : 'Убрано из плана');
+        showToast(item.inPlan ? `Добавлено в ${item.day} (${getActiveProfile().name})` : 'Убрано из плана');
         break;
       }
 
@@ -3234,10 +3412,7 @@
             showToast('Неверный формат файла');
             return;
           }
-          state = imported;
-          if (!Array.isArray(state.workoutCategories) || !state.workoutCategories.length) {
-            state.workoutCategories = ['День 1', 'День 2', 'День 3'];
-          }
+          state = normalizeState(imported);
           saveState();
           closeSheet(true);
           render();
@@ -3364,13 +3539,26 @@
       ex.name = document.getElementById('edit-name').value.trim() || ex.name;
       ex.equipment = document.getElementById('edit-equipment').value;
       ex.muscle = document.getElementById('edit-muscle').value;
+      if (ex.equipment === 'Кардио') {
+        ex.kind = 'cardio';
+        ex.metric = 'cardio';
+      } else if (ex.metric === 'cardio') {
+        ex.metric = 'weight';
+        ex.kind = ex.equipment === 'Свой вес' ? 'bodyweight' : 'base';
+      }
 
       const item = ensureUserItem(state.activeUser, exId);
       const wVal = parseFloat(document.getElementById('edit-weight').value);
       item.weight = Number.isNaN(wVal) ? 0 : Math.max(0, wVal);
+      const stepEl = document.getElementById('edit-step');
+      if (stepEl) {
+        const sVal = parseFloat(stepEl.value);
+        if (sVal === 2.5 || sVal === 5) item.step = sVal;
+      }
       item.day = document.getElementById('edit-day')?.value || getDefaultCategory();
       item.setupNote = document.getElementById('edit-setup').value.trim();
       item.inPlan = document.getElementById('edit-in-plan').checked;
+      delete item.holdWeight;
 
       saveState();
       closeSheet(true);
@@ -3532,7 +3720,7 @@
   if (TG && TG.isInTelegram()) {
     TG.pull(state).then((res) => {
       if (res.exists && res.merged) {
-        state = res.merged;
+        state = normalizeState(res.merged);
         saveState({ sync: false, touchUser: null });
         render();
       }

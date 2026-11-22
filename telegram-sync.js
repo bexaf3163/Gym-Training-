@@ -119,13 +119,28 @@
     if (!local || !local.profiles) return remote;
 
     const merged = JSON.parse(JSON.stringify(local));
+    const localLatest = getLatestTimestamp(local);
+    const remoteLatest = getLatestTimestamp(remote);
+    const remoteNewer = remoteLatest > localLatest;
 
-    const cats = new Set([...(local.workoutCategories || []), ...(remote.workoutCategories || [])]);
-    merged.workoutCategories = [...cats];
+    // Учитываем удаление/переименование дней тренировок по более свежей версии
+    if (remoteNewer && Array.isArray(remote.workoutCategories) && remote.workoutCategories.length) {
+      merged.workoutCategories = [...remote.workoutCategories];
+    } else if (Array.isArray(local.workoutCategories) && local.workoutCategories.length) {
+      merged.workoutCategories = [...local.workoutCategories];
+    } else {
+      merged.workoutCategories = ['День 1', 'День 2', 'День 3'];
+    }
 
+    // При слиянии базы упражнений приоритет отдаём более свежей версии
     const exMap = new Map();
-    (remote.exercises || []).forEach((ex) => exMap.set(ex.id, ex));
-    (local.exercises || []).forEach((ex) => exMap.set(ex.id, ex));
+    if (remoteNewer) {
+      (local.exercises || []).forEach((ex) => exMap.set(ex.id, ex));
+      (remote.exercises || []).forEach((ex) => exMap.set(ex.id, ex));
+    } else {
+      (remote.exercises || []).forEach((ex) => exMap.set(ex.id, ex));
+      (local.exercises || []).forEach((ex) => exMap.set(ex.id, ex));
+    }
     merged.exercises = [...exMap.values()];
 
     ['mark', 'lera'].forEach((uid) => {
@@ -145,21 +160,36 @@
       }
     });
 
-    merged.activeUser = local.activeUser;
+    // Удаляем осиротевшие упражнения, которые были удалены на более новом устройстве
+    const activeIds = new Set([
+      ...Object.keys(merged.profiles.mark?.items || {}),
+      ...Object.keys(merged.profiles.lera?.items || {})
+    ]);
+    if (remoteNewer) {
+      const remoteIds = new Set((remote.exercises || []).map((e) => e.id));
+      merged.exercises = merged.exercises.filter((e) => remoteIds.has(e.id) || activeIds.has(e.id));
+    }
+
+    merged.activeUser = (remoteNewer && remote.activeUser && merged.profiles[remote.activeUser])
+      ? remote.activeUser
+      : local.activeUser;
     merged.activeTab = local.activeTab;
     merged.workoutDayFilter = merged.workoutCategories.includes(local.workoutDayFilter)
       ? local.workoutDayFilter
       : merged.workoutCategories[0];
-    merged.settings = { ...(remote.settings || {}), ...(local.settings || {}) };
-    merged.updatedAt = new Date(Math.max(getLatestTimestamp(local), getLatestTimestamp(remote))).toISOString();
+    merged.settings = remoteNewer
+      ? { ...(local.settings || {}), ...(remote.settings || {}) }
+      : { ...(remote.settings || {}), ...(local.settings || {}) };
+    merged.updatedAt = new Date(Math.max(localLatest, remoteLatest)).toISOString();
 
     return merged;
   }
 
   function extractPayload(appState) {
     return {
-      schemaVersion: 5,
+      schemaVersion: 6,
       updatedAt: appState.updatedAt || new Date().toISOString(),
+      activeUser: appState.activeUser,
       workoutCategories: appState.workoutCategories,
       exercises: appState.exercises,
       profiles: appState.profiles,
