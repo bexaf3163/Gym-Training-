@@ -54,27 +54,27 @@
 [data-theme="dark"] {
   --bg: #000000;
   --bg-desktop: #0B0B0D;
-  --card: #1C1C1E;
-  --card-subtle: #242426;
-  --fill: rgba(120, 120, 128, 0.28);
-  --fill-strong: rgba(120, 120, 128, 0.4);
-  --separator: rgba(255, 255, 255, 0.12);
+  --card: #17171A;
+  --card-subtle: #212125;
+  --fill: rgba(120, 120, 128, 0.26);
+  --fill-strong: rgba(120, 120, 128, 0.38);
+  --separator: rgba(255, 255, 255, 0.11);
   --text: #FFFFFF;
-  --text-secondary: #A1A1A6;
-  --text-tertiary: #6E6E73;
-  --glass: rgba(16, 16, 18, 0.84);
-  --glass-tab: rgba(24, 24, 26, 0.88);
+  --text-secondary: #9E9EA5;
+  --text-tertiary: #6C6C72;
+  --glass: rgba(14, 14, 16, 0.84);
+  --glass-tab: rgba(20, 20, 23, 0.88);
   --sheet-bg: #141416;
-  --sheet-card: #1C1C1E;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
-  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.32), 0 0 0 0.5px rgba(255, 255, 255, 0.06);
-  --shadow-seg: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --sheet-card: #1C1C1F;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35), inset 0 0.5px 0 rgba(255, 255, 255, 0.09);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.44), 0 0 0 0.5px rgba(255, 255, 255, 0.085), inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
+  --shadow-seg: 0 2px 8px rgba(0, 0, 0, 0.45), inset 0 0.5px 0 rgba(255, 255, 255, 0.08);
 
   --accent: #0A84FF;
   --accent-hover: #2E96FF;
-  --accent-soft: rgba(10, 132, 255, 0.18);
+  --accent-soft: rgba(10, 132, 255, 0.17);
   --success: #30D158;
-  --success-soft: rgba(48, 209, 88, 0.18);
+  --success-soft: rgba(48, 209, 88, 0.15);
   --warning: #FF9F0A;
   --warning-soft: rgba(255, 159, 10, 0.18);
   --danger: #FF453A;
@@ -324,6 +324,10 @@ button:active {
   padding: calc(10px + var(--safe-top)) 16px calc(92px + var(--safe-bottom));
 }
 
+.timer-floating-host:not(:empty) + .main-content {
+  padding-top: 10px;
+}
+
 /* Section Headers */
 .screen-header {
   display: flex;
@@ -488,14 +492,25 @@ button:active {
 }
 
 .exercise-card.ready-progress {
-  box-shadow: 0 0 0 1.5px var(--success), var(--shadow-card);
+  box-shadow: 0 0 0 1.25px rgba(52, 199, 89, 0.45), var(--shadow-card);
+}
+
+[data-theme="dark"] .exercise-card.ready-progress {
+  box-shadow: 0 0 0 1.25px rgba(48, 209, 88, 0.42), 0 4px 18px rgba(48, 209, 88, 0.08), var(--shadow-card);
 }
 
 .ex-top {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 11px;
+}
+
+.ex-body-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
 .ex-meta {
@@ -503,12 +518,27 @@ button:active {
   flex: 1;
 }
 
+.ex-meta-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .ex-tags {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
+  min-width: 0;
+}
+
+.ex-meta .ex-tags {
   margin-bottom: 5px;
+}
+
+.ex-meta-controls .ex-tags {
+  margin-bottom: 0;
 }
 
 .tag {
@@ -534,10 +564,10 @@ button:active {
 
 .ex-name {
   margin: 0;
-  font-size: 16.5px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.015em;
-  line-height: 1.25;
+  line-height: 1.24;
 }
 
 .ex-setup-btn {
@@ -564,16 +594,17 @@ button:active {
 }
 
 .step-btn {
-  width: 32px;
-  height: 36px;
-  border-radius: 10px;
+  width: 30px;
+  height: 34px;
+  border-radius: 9.5px;
   background: var(--fill);
   color: var(--text);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-sm);
 }
 
 .step-btn:hover {
@@ -581,26 +612,26 @@ button:active {
 }
 
 .weight-readout {
-  min-width: 64px;
-  height: 36px;
-  padding: 0 8px;
-  border-radius: 10px;
+  min-width: 58px;
+  height: 34px;
+  padding: 0 7px;
+  border-radius: 9.5px;
   background: var(--accent-soft);
   color: var(--accent);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  line-height: 1.05;
+  line-height: 1.04;
 }
 
 .weight-num {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
 }
 
 .weight-unit {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 600;
   opacity: 0.85;
 }
@@ -787,6 +818,24 @@ button:active {
   -webkit-user-select: none;
 }
 
+.card-delete-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  background: transparent;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+
+.card-delete-btn:hover,
+.card-delete-btn:active {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
 .text-action-btn {
   font-size: 12.5px;
   font-weight: 600;
@@ -821,6 +870,7 @@ button:active {
   align-items: center;
   justify-content: center;
   gap: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .progress-cta-row .progress-cta {

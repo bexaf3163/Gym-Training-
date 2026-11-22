@@ -1128,28 +1128,28 @@
     return `
       <article class="exercise-card ${showUpgrade ? 'ready-progress' : ''}" data-ex-id="${ex.id}">
         <div class="ex-top">
-          <div class="ex-head-left">
-            <button type="button" class="ex-thumb" data-action="open-visual-preview" data-ex-id="${ex.id}" title="Показать визуализацию тренажёра">
-              ${getVisualForExercise(ex)}
-            </button>
-            <div class="ex-meta" data-action="open-edit-sheet" data-ex-id="${ex.id}" style="cursor:pointer;">
-              <div class="ex-tags">
+          <button type="button" class="ex-thumb" data-action="open-visual-preview" data-ex-id="${ex.id}" title="Показать визуализацию тренажёра">
+            ${getVisualForExercise(ex)}
+          </button>
+
+          <div class="ex-body-col">
+            <h2 class="ex-name" data-action="open-edit-sheet" data-ex-id="${ex.id}" style="cursor:pointer;">${escapeHtml(ex.name)}</h2>
+            <div class="ex-meta-controls">
+              <div class="ex-tags" data-action="open-edit-sheet" data-ex-id="${ex.id}" style="cursor:pointer;">
                 ${renderUniqueTags([
                   { text: ex.equipment, cls: 'accent' },
                   { text: ex.muscle }
                 ])}
               </div>
-              <h2 class="ex-name">${escapeHtml(ex.name)}</h2>
+              <div class="weight-stepper">
+                <button type="button" class="step-btn" data-action="weight-step" data-ex-id="${ex.id}" data-delta="-1" aria-label="Уменьшить">−</button>
+                <button type="button" class="weight-readout tabular" data-action="open-weight-sheet" data-ex-id="${ex.id}" title="Ввести вручную или сменить шаг">
+                  <span class="weight-num">${topNum}</span>
+                  <span class="weight-unit">${topUnit}</span>
+                </button>
+                <button type="button" class="step-btn" data-action="weight-step" data-ex-id="${ex.id}" data-delta="1" aria-label="Увеличить">+</button>
+              </div>
             </div>
-          </div>
-
-          <div class="weight-stepper">
-            <button type="button" class="step-btn" data-action="weight-step" data-ex-id="${ex.id}" data-delta="-1" aria-label="Уменьшить">−</button>
-            <button type="button" class="weight-readout tabular" data-action="open-weight-sheet" data-ex-id="${ex.id}" title="Ввести вручную или сменить шаг">
-              <span class="weight-num">${topNum}</span>
-              <span class="weight-unit">${topUnit}</span>
-            </button>
-            <button type="button" class="step-btn" data-action="weight-step" data-ex-id="${ex.id}" data-delta="1" aria-label="Увеличить">+</button>
           </div>
         </div>
 
@@ -1202,7 +1202,14 @@
                 </button>
               </div>
             ` : ''}
-            <button type="button" class="text-action-btn" style="color:var(--danger);opacity:0.85;" data-action="open-remove-sheet" data-ex-id="${ex.id}">Удалить</button>
+            <button type="button" class="card-delete-btn" data-action="open-remove-sheet" data-ex-id="${ex.id}" aria-label="Удалить упражнение" title="Удалить">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6"/>
+              </svg>
+            </button>
           </div>
         </div>
 
